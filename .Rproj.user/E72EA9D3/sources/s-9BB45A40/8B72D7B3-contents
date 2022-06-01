@@ -1,0 +1,12 @@
+---
+title: "Publications"
+description: |
+  Journal and book articles written.
+author:
+  - name: Robert Settlage 
+date: "`r Sys.Date()`"
+bibliography: robert_settlage_citations.bib
+---
+---
+nocite: '@*'
+---

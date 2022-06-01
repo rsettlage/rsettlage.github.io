@@ -1,0 +1,21 @@
+---
+title: "MCMC"
+description: |
+  A place for my collection of Monte Carlo learning and musings.
+author:
+  - name: Robert Settlage 
+    url: https://rsettlage.github.io/
+date: "`r Sys.Date()`"
+listing: mcmc
+---
+
+Computer simulations have always been my thing.  I love Chao Theory, Fractals, and the like from a computer simulation perspective.  I could code some sort of random walk up and just visualize it's progression ad naseum.  This collection is specific to my learning about and exploring Monte Carlo methods.
+
+The two topics in Monte Carlo methods I like most are Hidden Markov models and time series methods.  I hope to touch on both as this collection matures.
+
+
+
+
+
+
+
