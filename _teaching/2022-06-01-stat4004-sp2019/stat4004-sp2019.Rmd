@@ -1,0 +1,31 @@
+---
+title: "STAT 4004 Spring 2019"
+description: |
+  Methods of Statistical Computing.  3 credit undergraduate couse.  
+categories: [R, git, Markdown, Latex, Reproducible Research, Good Programming Practices]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-01
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Methods of Statistical Computing  
+
+Jan 2019 – May 2019  
+
+R based class focused on Reproducibile Research through Markdown and git, programming principles, and Deep Learning fundamentals as a destination.
+
+

@@ -1,0 +1,158 @@
+[
+  {
+    "path": "teaching/2022-06-01-fdi/",
+    "title": "Faculty Development Institute Lectures",
+    "description": "Lectures given to the faculty at VT in various formats.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-01",
+    "categories": [
+      "R",
+      "CUDA",
+      "Keras",
+      "Parallel Programming",
+      "R-gpus",
+      "Deep Learning",
+      "Genomics"
+    ],
+    "contents": "\nLectures given to the VT faculty through the VT Faculty Development\nInstitute. Formats are 1-2 hours and in one case was a 3 session\nworkshop.\nJan 2016 – Present Topics include:\nR-Keras\nDeep Learning Fundamentals for Computer Vision\nGenomics Analysis on ARC\nCUDA\nParallel R\nR-gpus\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-01T17:39:24-04:00",
+    "input_file": {}
+  },
+  {
+    "path": "teaching/2022-06-01-stat4004-sp2019/",
+    "title": "STAT 4004 Spring 2019",
+    "description": "Methods of Statistical Computing.  3 credit undergraduate couse.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-01",
+    "categories": [
+      "R",
+      "git",
+      "Markdown",
+      "Latex",
+      "Reproducible Research",
+      "Good Programming Practices"
+    ],
+    "contents": "\nMethods of Statistical Computing\nJan 2019 – May 2019\nR based class focused on Reproducibile Research through Markdown and\ngit, programming principles, and Deep Learning fundamentals as a\ndestination.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-01T17:38:59-04:00",
+    "input_file": {}
+  },
+  {
+    "path": "teaching/2022-06-01-stat5014-fall2019/",
+    "title": "STAT 5014 Fall 2019",
+    "description": "Introduction to Statistical Computing.  1 credit Graduate course.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-01",
+    "categories": [
+      "R",
+      "git",
+      "Markdown",
+      "Latex",
+      "Reproducible Research",
+      "Good Programming Practices",
+      "SAS",
+      "Python"
+    ],
+    "contents": "\nIntroduction to Statistical Computing\nAug 2019 – Dec 2019\nTopics include:\nReproducuble Research\nGood Programming Practices\nLatex/Markdown\nParallel computing\nSAS\nPython\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-01T17:42:38-04:00",
+    "input_file": {}
+  },
+  {
+    "path": "teaching/2022-06-01-stat5014-fall2020/",
+    "title": "STAT 5014 Fall 2020",
+    "description": "Introduction to Statistical Computing.  1 credit Graduate course.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-01",
+    "categories": [
+      "R",
+      "git",
+      "Markdown",
+      "Latex",
+      "Reproducible Research",
+      "Good Programming Practices",
+      "Keras",
+      "Python",
+      "HPC"
+    ],
+    "contents": "\nIntroduction to Statistical Computing\nAug 2020 – Dec 2020\nTopics include:\nR and scripting\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nPython\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-01T17:47:04-04:00",
+    "input_file": {}
+  },
+  {
+    "path": "teaching/2022-06-01-stat5014-fall2021/",
+    "title": "STAT 5014 Fall 2021",
+    "description": "Introduction to Statistical Computing.  1 credit Graduate course.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-01",
+    "categories": [
+      "R",
+      "git",
+      "Markdown",
+      "Latex",
+      "Reproducible Research",
+      "Good Programming Practices",
+      "Keras",
+      "Python",
+      "HPC"
+    ],
+    "contents": "\nIntroduction to Statistical Computing\nAug 2021 – Dec 2021\nTopics include:\nR and scripting Markdown and Latex\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nAutomation through GitHub actions\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-01T17:48:49-04:00",
+    "input_file": {}
+  },
+  {
+    "path": "teaching/2022-06-01-stat5526-fall2020/",
+    "title": "STAT 5526 Fall 2020",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-01",
+    "categories": [
+      "R",
+      "git",
+      "Markdown",
+      "Latex",
+      "Reproducible Research",
+      "Good Programming Practices",
+      "Keras",
+      "Python",
+      "HPC"
+    ],
+    "contents": "\nIntroduction to Statistical Computing\nAug 2020 – Dec 2020\nTopics include:\nR and scripting\nbash use\nhigh-performance computing, system design, interaction with\nschedulers\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nPython\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-01T17:46:11-04:00",
+    "input_file": {}
+  }
+]

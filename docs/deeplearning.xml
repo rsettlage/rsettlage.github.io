@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Robert E. Settlage</title>
+    <link>https://rsettlage.github.io/</link>
+    <atom:link href="https://rsettlage.github.io/deeplearning.xml" rel="self" type="application/rss+xml"/>
+    <description>Robert Settlage
+</description>
+    <image>
+      <title>Robert E. Settlage</title>
+      <url>https://rsettlage.github.io/images/logo_bird.png</url>
+      <link>https://rsettlage.github.io/</link>
+    </image>
+    <generator>Distill</generator>
+    <lastBuildDate>Tue, 31 May 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>DeepLearning Inspiration</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/deeplearning</link>
+      <description>Details of why DeepLearning for me.</description>
+      <category>DeepLearning</category>
+      <category>Perceptron</category>
+      <guid>https://rsettlage.github.io/deeplearning</guid>
+      <pubDate>Tue, 31 May 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://rsettlage.github.io/deeplearning/./images/perceptron.drawio.png" medium="image" type="image/png" width="327" height="251"/>
+    </item>
+  </channel>
+</rss>

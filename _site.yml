@@ -1,0 +1,47 @@
+name: "rsettlage.github.io.2"
+title: "Robert E. Settlage"
+description: |
+  Robert Settlage
+favicon: images/logo_bird.png
+base_url: https://rsettlage.github.io/
+repository_url: https://github.com/rsettlage/rsettlage.github.io
+creative_commons: CC BY
+output_dir: "docs"
+theme: styles.css
+collections:
+  posts:
+    categories: true
+    categories_metadata: true
+    authors_metadata: false
+    feed_iems_max: 20 # default
+  talks:
+    categories: true
+    categories_metadata: true
+    authors_metadata: false
+    feed_iems_max: 20 # default
+navbar:
+  logo:
+    image: images/logo_bird.png
+    search: true
+  right:
+    - text: "Teaching"
+      href: teaching.html
+    - text: "Books"
+      href: books.html
+    - text: "Musings"
+    - menu:
+      - text: "MCMC"
+        href: mcmc.html
+      - text: "DeepLearning"
+        href: deeplearning.html
+    - text: "About me"
+      href: about.html
+    - menu:
+      - text: "Resume"
+        href: resume.html
+      - text: "Publications"
+        href: publications.html
+    - icon: fab fa-github
+      href: https://github.com/rsettlage/rsettlage.github.io
+output: 
+  distill::distill_article
