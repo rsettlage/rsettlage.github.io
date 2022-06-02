@@ -23,7 +23,7 @@ collections:
     categories: true
     categories_metadata: true
     authors_metadata: false
-    feed_iems_max: false
+    feed_iems_max: 20 
   posts:
     categories: true
     categories_metadata: true
