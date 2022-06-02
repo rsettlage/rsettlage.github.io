@@ -12,7 +12,7 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 31 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jun 2022 00:00:00 +0000</lastBuildDate>
     <item>
       <title>DeepLearning Inspiration</title>
       <dc:creator>Robert Settlage</dc:creator>
@@ -21,7 +21,7 @@
       <category>DeepLearning</category>
       <category>Perceptron</category>
       <guid>https://rsettlage.github.io/deeplearning</guid>
-      <pubDate>Tue, 31 May 2022 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
       <media:content url="https://rsettlage.github.io/deeplearning/./images/perceptron.drawio.png" medium="image" type="image/png" width="327" height="251"/>
     </item>
   </channel>

@@ -26,7 +26,7 @@ library(ggplot2)
 library(ggExtra)
 ```
 
-I like computer simulations. That is like dumb science though. What if the computer could actually learn and make decisions. Woah. Perhaps that is a little too Terminator for where we are at currently, but, how far away is that? Probably not terribly far off. As with the MCMC collection, I am going to start at the start of my understanding and see where I get. In the realm of Deep Learning, I particularly like the adversarial networks and reinforcement learning so will likely spend more time on those.
+I like computer simulations. That is like dumb science though. What if the computer could actually learn and make decisions. Woah. Perhaps that is a little too Terminator for where we are at currently, but, how far away is that? Probably not terribly far off. As with the MCMC collection, I am going to start at the start of my understanding and see where I get. In the realm of Deep Learning, I particularly like adversarial networks and reinforcement learning so will likely spend more time on those.
 
 Here, I am going to start with what I see as the motivation for DeepLearning, biology and the perceptron. A particularly good coffee table resource is:
 
@@ -76,11 +76,12 @@ These are the things we need, the parameters of the model. In a linear models cl
 
 ### Z
 
-We need a function to combine the data with the appropriate weights. This is generally given the sybmol "z" or in some figures the symbol for sum: $\sum$. Setting the bias to 1 and learning the associate weight leaves us with:
+We need a function to combine the data with the appropriate weights. This is generally given the sybmol "z" or in some figures the symbol for sum: $\sum$. Setting the bias to 1 and learning the associate weight leaves us with: 
+
 $$
 \begin{equation}
 \tag{1}
-\textbf{z} = \sum_i w_i \ast x_i = \textbf{w} \cdot \textbf{x}
+\textbf{z} = \sum_i w_i \ast x_i = \textbf{w}\cdot\textbf{x}
 \end{equation}
 $$
 
@@ -99,14 +100,57 @@ f(z) =
 \end{equation}
 $$
 
-Activation functions are a varied and active area of research. Common activations functions in neural networks include ReLU, sigmoid, and tanh among others. Choice of activation function depends highly on the goals of the algorithm and will be discussed in its own future post.
+Activation functions are a varied and active area of research. Common activations functions in neural networks include ReLU, sigmoid, and tanh among others. Choice of activation function depends highly on the goals of the algorithm and will be discussed in its own future post.  Here I will simply give the sigmoid activation function and state that it is appropriate and useful in categorical settings where a probability is desired.  The sigmoid function looks like:
+
+$$
+\begin{equation}
+\tag{3}
+f(z) = \frac{1}{1+e^{-z}} = \frac{1}{1+e^{-\textbf{w}\cdot\textbf{x}}}
+\end{equation}
+$$
+It is useful to note that $\textbf{w}\cdot\textbf{x} \in [-\infty,\infty]$ such that $f(z) \in [0,1]$.  For those of you that have studied logistic regression, this should look familiar.
 
 ### Outputs
 
 The output of the perceptron is our decision. If using the step function given in (2), the decision may be something as simple as is the image a cat (+1) or not a cat (0). Turning to linear regression, the output is our z's, or y's if that is more familiar.
 
-[](<https://www.simplilearn.com/ice9/free_resources_article_thumb/Perceptron/general-diagram-of-perceptron-for-supervised-learning_4.jpg>)
+## Learning
+I was hoping to skip this for now, but want to go through an example, so will need to hit on both scoring a result and improving the score.  Essentially, what we are hitting on is the perceptron receives data, applies weights, adds them according to $z$, and finally calculates the function $f(z)$ to create an output $y$.  This output can be a binary (0,1), categorical discrete (0,1,2,...), or a continuous value on some range [0,1].  We often (always?) are fitting some known data.  Using the known data, we can score how well the current settings on weight fit the data.  We do this via a score function often called a loss function in AI/machine learning speak.  If we can score our result, we should be able to improve our score.  We do this through iterative updates, often using a variant of gradient descent and back propagation.  
 
-## Multiclass perceptrons
+### Loss function
+The loss function is some measure of how good/bad the model performs based on data.  I am going to leave most of this discussion for a different post and just give two here: MSE or L$_2$ error and binary cross entropy.
 
-## Multilayer Perceptrons
+#### MSE
+
+MSE, L$_2$, or mean squared error is a measure of error well suited for continuous data.  It is calculated exactly as the name suggests, take the mean of the square of the error.  
+$$
+\begin{eqnarray}
+\tag{4}
+MSE &=& \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2 \\
+  &=& \frac{1}{n} \sum_{i=1}^n (y_i - \hat{\textbf{w}}\cdot\textbf{x}_i)^2
+\end{eqnarray}
+$$
+Remembering that in the above $y = f(z) = \textbf{w}\cdot\textbf{x}$.  The hat $\hat{}$ signifies this is an estimated value, ie the current output of the perceptron using the current values of weights. The last line is simply noting the $x_i$ are likely vectors representing the inclusion of the bias as an x and perhaps multiple dimensions to the data.  Note that MSE is always positive and gets smaller as the prediction and true values converge.
+
+#### Binary Cross Entropy  
+Often we are looking discriminate between categories, cat vs dog, high vs medium vs low, safe vs risky, etc.  In the general case, there can be many categories.  The loss function is effectively a probability distance.
+
+
+$$
+\begin{equation}
+\tag{5}
+Loss = -\frac{1}{n}\sum_{i}^n y_i log(\hat{y}_i) + (1-y_i)log(1-\hat{y}_i)
+\end{equation}
+$$
+In this case, the labels, $y_i$'s will be 0 or 1 indicating which class the data point belongs to and the $\hat{y}$'s should be considered a probability of the data point belonging to the 1-class.  Note that only one of the two terms will be active based on the actual label and also that the log will always be negative because $0 \le \hat{y}_i \le 1$, hence the "-" out front to ensure we have a positive value.  Our goal is to minimize the loss.
+
+#### Gradient descent
+So, we can calculate an error or loss, how do we do better?  We could take random steps and start to get an idea of what the loss surface looks like, but that seems like a good way to compute for ever (not a bad thing if I am making pretty pictures along the way ;) ).  Instead, we will use a little calculus to figure out in which direction we should step.  Remembering from calculus, if we compute the gradient, we will have an indication of slope.
+
+## Example 1: linear model
+We have gone way to long without data. :)  
+
+
+### Multiclass perceptrons
+
+### Multilayer Perceptrons
