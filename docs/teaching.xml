@@ -12,11 +12,11 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 01 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 01 Jan 2022 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Faculty Development Institute Lectures</title>
       <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/teaching/2022-06-01-fdi</link>
+      <link>https://rsettlage.github.io/teaching</link>
       <description>Lectures given to the faculty at VT in various formats.</description>
       <category>R</category>
       <category>CUDA</category>
@@ -25,89 +25,8 @@
       <category>R-gpus</category>
       <category>Deep Learning</category>
       <category>Genomics</category>
-      <guid>https://rsettlage.github.io/teaching/2022-06-01-fdi</guid>
-      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>STAT 4004 Spring 2019</title>
-      <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/teaching/2022-06-01-stat4004-sp2019</link>
-      <description>Methods of Statistical Computing.  3 credit undergraduate couse.</description>
-      <category>R</category>
-      <category>git</category>
-      <category>Markdown</category>
-      <category>Latex</category>
-      <category>Reproducible Research</category>
-      <category>Good Programming Practices</category>
-      <guid>https://rsettlage.github.io/teaching/2022-06-01-stat4004-sp2019</guid>
-      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>STAT 5014 Fall 2019</title>
-      <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/teaching/2022-06-01-stat5014-fall2019</link>
-      <description>Introduction to Statistical Computing.  1 credit Graduate course.</description>
-      <category>R</category>
-      <category>git</category>
-      <category>Markdown</category>
-      <category>Latex</category>
-      <category>Reproducible Research</category>
-      <category>Good Programming Practices</category>
-      <category>SAS</category>
-      <category>Python</category>
-      <guid>https://rsettlage.github.io/teaching/2022-06-01-stat5014-fall2019</guid>
-      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>STAT 5014 Fall 2020</title>
-      <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/teaching/2022-06-01-stat5014-fall2020</link>
-      <description>Introduction to Statistical Computing.  1 credit Graduate course.</description>
-      <category>R</category>
-      <category>git</category>
-      <category>Markdown</category>
-      <category>Latex</category>
-      <category>Reproducible Research</category>
-      <category>Good Programming Practices</category>
-      <category>Keras</category>
-      <category>Python</category>
-      <category>HPC</category>
-      <guid>https://rsettlage.github.io/teaching/2022-06-01-stat5014-fall2020</guid>
-      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>STAT 5014 Fall 2021</title>
-      <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/teaching/2022-06-01-stat5014-fall2021</link>
-      <description>Introduction to Statistical Computing.  1 credit Graduate course.</description>
-      <category>R</category>
-      <category>git</category>
-      <category>Markdown</category>
-      <category>Latex</category>
-      <category>Reproducible Research</category>
-      <category>Good Programming Practices</category>
-      <category>Keras</category>
-      <category>Python</category>
-      <category>HPC</category>
-      <guid>https://rsettlage.github.io/teaching/2022-06-01-stat5014-fall2021</guid>
-      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>STAT 5526 Fall 2020</title>
-      <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/teaching/2022-06-01-stat5526-fall2020</link>
-      <description>A short description of the post.</description>
-      <category>R</category>
-      <category>git</category>
-      <category>Markdown</category>
-      <category>Latex</category>
-      <category>Reproducible Research</category>
-      <category>Good Programming Practices</category>
-      <category>Keras</category>
-      <category>Python</category>
-      <category>HPC</category>
-      <guid>https://rsettlage.github.io/teaching/2022-06-01-stat5526-fall2020</guid>
-      <pubDate>Wed, 01 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://rsettlage.github.io/teaching</guid>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
     </item>
   </channel>
 </rss>

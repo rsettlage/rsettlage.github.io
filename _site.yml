@@ -9,12 +9,27 @@ creative_commons: CC BY
 output_dir: "docs"
 theme: styles.css
 collections:
+  mcmc:
+    categories: true
+    categories_metadata: true
+    authors_metadata: false
+    feed_iems_max: 20 # default
+  deeplearning:
+    categories: true
+    categories_metadata: true
+    authors_metadata: false
+    feed_iems_max: 20 # default
+  teaching:
+    categories: true
+    categories_metadata: true
+    authors_metadata: false
+    feed_iems_max: false
   posts:
     categories: true
     categories_metadata: true
     authors_metadata: false
     feed_iems_max: 20 # default
-  talks:
+  books:
     categories: true
     categories_metadata: true
     authors_metadata: false

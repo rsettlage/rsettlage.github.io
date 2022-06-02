@@ -8,5 +8,3 @@ author:
 listing: teaching
 ---
 
-Rework as cards when time permits.  For now, as a blog as a simple alternative.
-
