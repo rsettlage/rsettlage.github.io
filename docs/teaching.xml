@@ -26,7 +26,7 @@
       <category>Good Programming Practices</category>
       <category>Keras</category>
       <category>Python</category>
-      <category>HPC</category>
+      <category>automation</category>
       <guid>https://rsettlage.github.io/teaching/NA-stat5014f2021</guid>
       <pubDate>Thu, 06 Jan 2022 00:00:00 +0000</pubDate>
     </item>
@@ -34,7 +34,22 @@
       <title>STAT 5526 Fall 2020</title>
       <dc:creator>Robert Settlage</dc:creator>
       <link>https://rsettlage.github.io/teaching/NA-stat5526f2019</link>
-      <description>A short description of the post.</description>
+      <description>This advanced class included big data and computing lectures.</description>
+      <category>R</category>
+      <category>git</category>
+      <category>Markdown</category>
+      <category>Latex</category>
+      <category>Keras</category>
+      <category>Containers</category>
+      <category>HPC</category>
+      <guid>https://rsettlage.github.io/teaching/NA-stat5526f2019</guid>
+      <pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>STAT 5014 Fall 2020</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/teaching/NA-stat5014f2020</link>
+      <description>Introduction to Statistical Computing.  1 credit Graduate course.</description>
       <category>R</category>
       <category>git</category>
       <category>Markdown</category>
@@ -44,11 +59,11 @@
       <category>Keras</category>
       <category>Python</category>
       <category>HPC</category>
-      <guid>https://rsettlage.github.io/teaching/NA-stat5526f2019</guid>
-      <pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://rsettlage.github.io/teaching/NA-stat5014f2020</guid>
+      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-      <title>STAT 5014 Fall 2020</title>
+      <title>STAT 5014 Fall 2019</title>
       <dc:creator>Robert Settlage</dc:creator>
       <link>https://rsettlage.github.io/teaching/NA-stat5014f2019</link>
       <description>Introduction to Statistical Computing.  1 credit Graduate course.</description>
@@ -60,9 +75,8 @@
       <category>Good Programming Practices</category>
       <category>Keras</category>
       <category>Python</category>
-      <category>HPC</category>
       <guid>https://rsettlage.github.io/teaching/NA-stat5014f2019</guid>
-      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 03 Jan 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>STAT 4004 Spring 2019</title>

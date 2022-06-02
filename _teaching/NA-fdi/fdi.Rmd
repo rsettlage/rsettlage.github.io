@@ -23,8 +23,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Lectures given to the VT faculty through the VT Faculty Development Institute.  Formats are 1-2 hours and in one case was a 3 session workshop.  
 
-Jan 2016 – Present
-Topics include:
+Jan 2016 – Present  
+Topics include:  
 
 + R-Keras  
 + Deep Learning Fundamentals for Computer Vision  

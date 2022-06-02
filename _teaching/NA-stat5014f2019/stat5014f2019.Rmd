@@ -1,12 +1,12 @@
 ---
-title: "STAT 5014 Fall 2020"
+title: "STAT 5014 Fall 2019"
 description: |
   Introduction to Statistical Computing.  1 credit Graduate course.
-categories: [R, git, Markdown, Latex, Reproducible Research, Good Programming Practices, Keras, Python, HPC]
+categories: [R, git, Markdown, Latex, Reproducible Research, Good Programming Practices, Keras, Python]
 author:
   - name: Robert Settlage
     orcid: 0000-0002-1354-7609
-date: 2022-01-04
+date: 2022-01-03
 output:
   distill::distill_article:
     self_contained: false
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Introduction to Statistical Computing  
 
-Aug 2020 – Dec 2020  
+Aug 2019 – Dec 2019 
 
 Topics include:  
 

@@ -1,8 +1,8 @@
 ---
 title: "STAT 5526 Fall 2020"
 description: |
-  A short description of the post.
-categories: [R, git, Markdown, Latex, Reproducible Research, Good Programming Practices, Keras, Python, HPC]
+  This advanced class included big data and computing lectures.
+categories: [R, git, Markdown, Latex, Keras, Containers, HPC]
 author:
   - name: Robert Settlage
     orcid: 0000-0002-1354-7609
@@ -33,5 +33,5 @@ bash use
 high-performance computing, system design, interaction with schedulers  
 Very basic introduction to Monte Carlo  
 Introduction to neural networks and Keras  
-Python  
+Containers and Singularity/Docker  
 
