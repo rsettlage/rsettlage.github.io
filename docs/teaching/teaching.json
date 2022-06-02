@@ -24,7 +24,7 @@
     "contents": "\nIntroduction to Statistical Computing\nAug 2021 – Dec 2021\nTopics include:\nR and scripting Markdown and Latex\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nAutomation through GitHub actions\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-01T22:04:07-04:00",
-    "input_file": "stat5014f2021.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat5526f2019/",
@@ -51,7 +51,7 @@
     "contents": "\nIntroduction to Statistical Computing\nAug 2020 – Dec 2020\nTopics include:\nR and scripting\nbash use\nhigh-performance computing, system design, interaction with\nschedulers\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nPython\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-01T22:01:59-04:00",
-    "input_file": "stat5526f2019.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat5014f2019/",
@@ -78,7 +78,7 @@
     "contents": "\nIntroduction to Statistical Computing\nAug 2020 – Dec 2020\nTopics include:\nR and scripting\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nPython\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-01T22:00:20-04:00",
-    "input_file": "stat5014f2019.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat4004sp2019/",
@@ -102,7 +102,7 @@
     "contents": "\nMethods of Statistical Computing\nJan 2019 – May 2019\nR based class focused on Reproducibile Research through Markdown and\ngit, programming principles, and Deep Learning fundamentals as a\ndestination.\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-01T21:58:27-04:00",
-    "input_file": "stat4004sp2019.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-fdi/",
@@ -127,7 +127,7 @@
     "contents": "\nLectures given to the VT faculty through the VT Faculty Development\nInstitute. Formats are 1-2 hours and in one case was a 3 session\nworkshop.\nJan 2016 – Present Topics include:\nR-Keras\nDeep Learning Fundamentals for Computer Vision\nGenomics Analysis on ARC\nCUDA\nParallel R\nR-gpus\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-01T21:57:21-04:00",
-    "input_file": "fdi.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat5014f2018/",
@@ -154,6 +154,6 @@
     "contents": "\nIntroduction to Statistical Computing\nAug 2020 – Dec 2020\nTopics include:\nR and scripting\nbash use\nGit\nVery basic introduction to Monte Carlo\nPython\nSAS\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-01T22:06:11-04:00",
-    "input_file": "stat5014f2018.knit.md"
+    "input_file": {}
   }
 ]
