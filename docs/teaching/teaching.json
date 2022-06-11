@@ -102,7 +102,7 @@
     "contents": "\nIntroduction to Statistical Computing\nAug 2019 – Dec 2019\nTopics include:\nR and scripting\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nPython\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-02T05:15:57-04:00",
-    "input_file": "stat5014f2019.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat4004sp2019/",
@@ -151,7 +151,7 @@
     "contents": "\nLectures given to the VT faculty through the VT Faculty Development\nInstitute. Formats are 1-2 hours and in one case was a 3 session\nworkshop.\nJan 2016 – Present\nTopics include:\nR-Keras\nDeep Learning Fundamentals for Computer Vision\nGenomics Analysis on ARC\nCUDA\nParallel R\nR-gpus\n\n\n\n",
     "preview": {},
     "last_modified": "2022-06-02T05:16:54-04:00",
-    "input_file": "fdi.knit.md"
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat5014f2018/",

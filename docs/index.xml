@@ -16,11 +16,14 @@
     <item>
       <title>MCMC inspiration</title>
       <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/posts/2022-05-28-mcmc-inspiration</link>
-      <description>Details of why MCMC for me.</description>
-      <guid>https://rsettlage.github.io/posts/2022-05-28-mcmc-inspiration</guid>
+      <link>https://rsettlage.github.io/posts</link>
+      <description>Details of why MCMC for me including the Accept-Reject and Weighted Boostrap algorithms.</description>
+      <category>MCMC</category>
+      <category>Accept-Reject</category>
+      <category>Weighted Bootstrap</category>
+      <guid>https://rsettlage.github.io/posts</guid>
       <pubDate>Tue, 31 May 2022 00:00:00 +0000</pubDate>
-      <media:content url="https://rsettlage.github.io/posts/2022-05-28-mcmc-inspiration/mcmc-inspiration_files/figure-html5/plot_priors-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="https://rsettlage.github.io/posts/mcmc-inspiration_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
   </channel>
 </rss>

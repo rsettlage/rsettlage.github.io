@@ -1,0 +1,313 @@
+---
+title: "tl;dr accept-reject"
+description: |
+  Accept-Reject and Weighted Boostrap algorithms.
+categories: [MCMC, Accept-Reject, Weighted Bootstrap]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-04
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+Accept-reject, but following:
+
+> Smith and Gelfand, Bayesian statistics without tears: A sampling-resampling perspective, 1992 DOI:10.1080/00031305.1992.10475856.
+
+## Accept-Reject Alrogithm
+
+We want h($\theta$), but have g($\theta$).  Additionally, we know 
+$h(\theta) = \frac{f(\theta)}{\int{f(\theta) d\theta}}$
+and that there exists some constant $M>0$ where $\frac{f(\theta)}{g(\theta)} \le M$.
+
+Procedure:
+
+1. generate $\theta \sim g(\theta)$  
+2. generate $u \sim \text{unif}(0,1)$  
+3. if $u \le \frac{f(\theta)}{Mg(\theta)}$ accept (accept with probability u), else reject  
+4. repeat 1-3
+
+Any accepted $\theta$ is a random variate from $h(\theta) = \frac{f(\theta)}{\int f(\theta) d\theta}$.  The proof is relatively simple and given in about 3 lines in the Smith and Gelfand paper where I will point you if you need to see it.
+
+If we don't know M:
+
+$$
+\begin{eqnarray}
+\tag{1}
+M &=& \int f(\theta) d\theta \approx \frac{1}{n} \sum_i \omega_i \text{ , where } \\
+\tag{2}
+\omega_i &=& \frac{f(\theta_i)}{g(\theta_i)}
+\end{eqnarray}
+$$
+
+Or alternatively, we could use $Weighted\ Bootstrapping$ where we draw $\theta^{\ast}$ from a realization of $\theta = \{\theta_1 \dots \theta_n\}$.  From this we can calculate:
+$$
+\begin{equation}
+\tag{3}
+q_i = \frac{\omega_i}{\sum_j \omega_j} \text{ ; } \omega_{[i,j]} \text{ given in (2)}
+\end{equation}
+$$
+
+Now $q_i$ is our sampling probability for drawing from the $\theta_i$'s.
+
+### Example: Prior $\rightarrow$ Posterior 
+
+We have prior knowledge in $p(\theta)$ and want to update our knowledge base given new information via the posterior $p(\theta | \textbf{X})$.  
+
+If we let:
+$$
+\begin{eqnarray}
+\tag{4}
+f_x(\theta) &=& \ell(\theta|\textbf{X}) p(\theta)  \\
+\tag{5}
+g(\theta) &=& p(\theta) \text{, further, if we know } \hat{\theta}_{ML}  \\
+\tag{6}
+M &=& \ell(\hat{\theta|}\textbf{X})
+\end{eqnarray}
+$$
+
+So, returning to our procedure, we need to accept with probability u
+
+$$
+\begin{eqnarray}
+\tag{7}
+u &\le& \frac{f(\theta)}{Mg(\theta)} \\
+  &\le& \frac{\ell(\theta|\textbf{X}) p(\theta)}{\ell(\hat{\theta|}\textbf{X})p(\theta)} \\
+  &\le& \frac{\ell(\theta|\textbf{X})}{\ell(\hat{\theta|}\textbf{X})}
+\end{eqnarray}
+$$
+
+## Illustrative Example from article
+
+Smith and Gelfand reworked an example originally given by McCullagh and Nelder, Generalized Linear Models, 1989.  Essentially, consider two conditionally independent (given their parameters) random variables observed 3 times through their sum:
+
+$$
+\begin{eqnarray}
+\tag{8}
+\textbf{X}_{i1} &\sim& Binomial(n_{i1}, \theta_1) \\
+\tag{9}
+\textbf{X}_{i2} &\sim& Binomial(n_{i2}, \theta_2) \\
+\tag{10}
+\textbf{Y}_i &=& \textbf{X}_{i1} + \textbf{X}_{i2}; i \in \{1,2,3\}
+\end{eqnarray}
+$$
+
+Likelihood:
+
+$$
+\begin{equation}
+\tag{11}
+\ell(\theta_1,\theta_2 | \textbf{Y}, i \in \{1,2,3\}) = \prod_{i=1}^{3} \left[\sum_{j_i} {{n_{i1}}\choose{j_i}} {{n_{i2}}\choose{y_i-j_i}} \ast \theta_1^{j_i}(1-\theta_1)^{n_{i1}-y_i}\theta_2^{y_i-j_i}(1-\theta_2)^{n_{i2}-y_i+j_i}\right]
+\end{equation}
+$$
+
+And are given the following as data:
+
+```{r echo=FALSE, eval=TRUE}
+test_data <- data.frame(i1=c(5,5,7),i2=c(6,4,5),i3=c(4,6,6))
+row.names(test_data)<-c("$n_{i1}$","$n_{i2}$","$y_i$")
+knitr::kable(test_data,col.names=c(1,2,3)) %>%
+  kable_styling(full_width = FALSE, bootstrap_options = "striped") %>%
+  add_header_above(c(" ","i"=3))
+```
+Ok, so our data shows observed sums of $Y_i =X_1 + X_2$ going from 5 to 7 given the unknown $\theta_{j \in \{1,2\}}$.  
+
+### Paper example using Weighted Bootstrap
+
+Following the paper, we will consider priors on both $\theta_1$ and $\theta_2$ as uniform(0,1) where the authors generated about 1000 $\theta_1, \theta_2$ pairs.  Following suit:
+
+```{r prior_draws, echo=TRUE, include=TRUE}
+set.seed(15239) # just a random number as seed
+observations <- 1000
+t1 <- runif(n=observations, min=0, max=1)
+t2 <- runif(n=observations, min=0, max=1)
+theta_draws <- data.frame(theta1=t1, theta2=t2)
+```
+
+```{r echo=FALSE, include=TRUE, fig.cap="Theta draws from uniform priors"}
+g <- ggplot(data=theta_draws,aes(x=theta1, y=theta2)) +
+  geom_point(size=0.5) +
+  coord_fixed()
+ggMarginal(g, type = "histogram", size=3)
+```
+
+We now sample from these priors using the weighted bootstrap proceedure as outlined above.  To get at the weights, we need to start by calculating $q_i$.  Remembering $\omega_i = \frac{f(\theta_i)}{g(\theta_i)}$, $g(\theta_i) = p(\theta_i)$ and $f(\theta_i) = \ell(\theta_i|\textbf(X_i))p(\theta_i)$
+
+$$
+\begin{eqnarray}
+\tag{12}
+q_i &=& \frac{\omega_i}{\sum_{j=1}^n \omega_j} \\
+  &=& \frac{\frac{f(\theta_i)}{g(\theta_i)}}{\sum_{j=1}^n \frac{f(\theta_j)}{g(\theta_j)}} \\
+  &=& \frac{\ell(\theta_i|\textbf(X_i))}{\sum_{j=1}^n \ell(\theta_j|\textbf(X_j))}
+\end{eqnarray}
+$$
+I have been a little lax in the i, j in this.  Here i refers to the ith draw from the priors and j runs across all draws. Note that as we inspect (13), we encounter $j_i$.  This represents the possible values of $\textbf{X}_i$ given the parameters, $n_{i1}$ and $n_{i2}$, and observed $y_i$, so $max(0, y_i-n_{i2}) \le j_i \le min(n_{i1}, y_i)$.  Let's code this up and get our $q_i$'s.
+
+```{r calc_qi, echo=TRUE, eval=TRUE}
+
+ji_min_max <- data.frame(min=c(2,1,0),max=c(5,5,4))
+omega <- rep(1,observations)
+for(k in 1:observations){
+  for(i in 1:3){
+    ji <- ji_min_max[i,1]
+    temp_omega <- 0
+    while(ji<ji_min_max[i,2]){
+      temp_omega <- temp_omega +
+        choose(test_data[1,i],ji)*choose(test_data[2,i],test_data[3,i]-ji)*
+        (theta_draws$theta1[k]^ji)*((1-theta_draws$theta1[k])^(test_data[1,i]-ji))*
+        (theta_draws$theta2[k]^(test_data[3,i]-ji))*
+        ((1-theta_draws$theta2[k])^(test_data[2,i]-test_data[3,i]+ji))
+      ji <- ji+1
+    }
+    omega[k] <- omega[k] * temp_omega
+  }
+}
+q_i <- omega/sum(omega)
+
+```
+
+Now do the draws according to the $q_i$'s and calc the posterior.
+
+```{r calc_posterior, echo=TRUE, eval=TRUE}
+
+thetas_index <- sample(1:observations, size=1000, replace=TRUE, prob=q_i) 
+h <- omega[thetas_index]
+
+```
+
+```{r echo=FALSE, include=TRUE, fig.cap="Posterior with marginals using Weighted Bootstrap"}
+g <- theta_draws[thetas_index,] %>%
+  ggplot(aes(x=theta1, y=theta2)) +
+  geom_point(size=0.5) +
+  coord_fixed()
+ggMarginal(g, type = "histogram", size=3)
+```
+
+```{r echo=FALSE, include=TRUE, fig.cap="Posterior with marginals using Weighted Bootstrap as a density"}
+g_accepted <- theta_draws[thetas_index,] %>%
+  ggplot(aes(x=theta1, y=theta2)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white") + 
+  geom_point(colour = "pink", size=0.1) +
+  coord_fixed() 
+g_accepted
+```
+Note, no point in the above posterior is NOT in the previous plot of prior draws.  The paper appears to have used a different set of points for the plot of the posterior. 
+
+### Paper example using Accept-Reject following burn-in
+
+Estimate M on the fly and use "burn-in" to iteratively converge on M and do a real accept-reject.  
+
+```{r accept-reject, echo=TRUE, eval=TRUE}
+
+ji_min_max <- data.frame(min=c(2,1,0),max=c(5,5,4))
+#quick funtion to calc f(theta)=likelihood, basically took from above
+lhood <- function(t1=0.5,t2=0.5,tdata=test_data,ji_minimax=ji_min_max){
+  for(i in 1:3){
+    ji <- ji_minimax[i,1]
+    temp_likelihood <- 0
+    current_likelihood <- 1
+    while(ji<ji_minimax[i,2]){
+      temp_likelihood <- temp_likelihood +
+        choose(tdata[1,i],ji)*choose(tdata[2,i],tdata[3,i]-ji)*
+        (t1^ji)*((1-t1)^(tdata[1,i]-ji))*
+        (t2^(tdata[3,i]-ji))*((1-t2)^(tdata[2,i]-tdata[3,i]+ji))
+      ji <- ji+1
+    }
+    current_likelihood <- current_likelihood * temp_likelihood
+  }
+  return(current_likelihood)
+}
+
+stored_thetas <- rbind(data.frame(theta1=0,theta2=0,likelihood=0,u=0,accept=1,M=0),
+                       data.frame(theta1=0,theta2=0,likelihood=0,u=0,accept=1,M=0))
+k <- 2
+previous_M <- 0
+## actual accept/reject
+while(sum(stored_thetas$accept)<10000){
+  k <- k+1
+  # 1. make proposal(s)
+  # 2. generate u from uniform(0,1)
+  stored_thetas <- rbind(stored_thetas,
+                         data.frame(theta1=runif(1,0,1),theta2=runif(1,0,1),
+                              u=runif(1,0,1),likelihood=0,accept=0,M=0))
+  # 3. if u <= f/(Mg) then accept, else reject, repeat
+  
+  stored_thetas$likelihood[k] <- lhood(stored_thetas$theta1[k],
+                                            stored_thetas$theta2[k])
+  # calc running M real quick
+  M <- mean(stored_thetas$likelihood[stored_thetas$accept>0])
+  # accpet or reject?
+  stored_thetas$accept[k] <-
+    ifelse(stored_thetas$u[k]<stored_thetas$likelihood[k]/M,1, 0)
+  # update M if needed, this is for status indicator
+  stored_thetas$M[k] <-
+    ifelse(stored_thetas$accept[k]==1,M,stored_thetas$M[k-1])
+  if(stored_thetas$accept[k]==1){
+    M_change <- stored_thetas$M[k]-stored_thetas$M[k-1]
+  }
+  
+  # little status indicator
+  if((k %% 1000)==0){
+    cat("current k: ", k, " current accepted: ", sum(stored_thetas$accept),
+      " current/change in M:", M," : ", M_change, "\n",sep="")
+  }
+}
+stored_thetas <- stored_thetas[-c(1,2),]
+cat("final M is: ",M, "\n",sep="")
+```
+
+```{r eval=TRUE, fig.cap="Stablizing M"}
+#plot(stored_thetas$M,pch=16,cex=0.3,type="l")
+M_stablizing <- stored_thetas %>%
+  ggplot(aes(y=M,x=1:length(M))) +
+  geom_line(linetype=1)
+
+#ggarrange(M_stablizing,g_accepted,g_rejected, nrow = 3)
+M_stablizing
+
+```
+
+```{r eval=TRUE, fig.cap="Posterior with density, accpeted only"}
+cooked_thetas <- stored_thetas[-c(1:15000),]
+g_accepted <- cooked_thetas[cooked_thetas$accept>0,] %>%
+  ggplot(aes(x=theta1, y=theta2)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white") + 
+  geom_point(colour = "pink", size=0.1) +
+  coord_fixed() +
+  ggtitle("Contours of accepted points after burn-in")
+g_accepted
+```
+
+```{r eval=TRUE, fig.cap="Posterior with density, rejected only"}
+g_rejected <- cooked_thetas[cooked_thetas$accept<1,] %>%
+  ggplot(aes(x=theta1, y=theta2)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white") +
+  geom_point(colour = "red", size=0.1) +
+  coord_fixed() +
+  ggtitle("Contours of rejected points after burn-in")
+g_rejected
+```
+
+
+Alternatives for a future post?
+
++ different priors  
++ iterate on $\theta$'s, ie fix one, sample other, alternate
++ others ... ??
