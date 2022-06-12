@@ -16,13 +16,13 @@
     <item>
       <title>tl;dr Inverse CDF</title>
       <dc:creator>Robert Settlage</dc:creator>
-      <link>https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf</link>
+      <link>https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf-tldr</link>
       <description>Monte Carlo using the Inverse CDF.</description>
       <category>MCMC</category>
       <category>Inverse CDF</category>
-      <guid>https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf</guid>
+      <guid>https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf-tldr</guid>
       <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
-      <media:content url="https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf/inverse-cdf_files/figure-html5/bern_graph-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf-tldr/inverse-cdf-tldr_files/figure-html5/bern_graph-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>tl;dr Accept-Reject</title>
