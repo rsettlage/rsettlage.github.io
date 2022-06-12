@@ -1,5 +1,25 @@
 [
   {
+    "path": "mcmc/2022-06-12-chebychev-tldr/",
+    "title": "tl;dr Chebychev Inequality",
+    "description": "Chebychev Inequality proof and use.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-12",
+    "categories": [
+      "MCMC",
+      "Chebychev"
+    ],
+    "contents": "\n\nContents\nProof\nExample\n\nQuick proof and example of use of the Chebychev Inequality.\nSuppose we have \\(x\\sim f(x), g(x) \\gt 0,\n\\epsilon \\gt 0\\). The Chebychev Inequality is written as:\n\\[\n\\begin{equation}\n\\tag{1}\nPr(g(x) \\ge \\epsilon) \\le \\frac{E[g(x)]}{\\epsilon}\n\\end{equation}\n\\]\nProof\n\\[\n\\begin{eqnarray}\n\\tag{2}\nE[g(x)] &=& \\int_{\\Omega_x} g(x) f(x) dx\n\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;\\text{ :def of expectation}\\\\\n  &\\ge& \\int_{\\{x: g(x)\\ge \\epsilon\\}}g(x) f(x) dx\n\\;\\;\\;\\;\\text{ :limit x}\\\\\n  &\\ge& \\int_{\\{x: g(x)\\ge \\epsilon\\}} \\epsilon f(x) dx\n\\;\\;\\;\\;\\;\\;\\;\\;\\text{ :smallest g(x)=}\\epsilon \\\\\n  &\\ge& \\epsilon Pr(g(x)\\ge \\epsilon)\n\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;\\text{ :by def of prob}\n\\end{eqnarray}\n\\]\nSlight rearrangment gives desired Chebychev Inequality equation.\nExample\nThe example I am thinking about leads to the bifurcation of Monte\nCarlo and Las Vegas algorithms. Thoughts??\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-12T12:26:20-04:00",
+    "input_file": {}
+  },
+  {
     "path": "mcmc/2022-06-11-inverse-cdf-tldr/",
     "title": "tl;dr Inverse CDF",
     "description": "Monte Carlo using the Inverse CDF.",

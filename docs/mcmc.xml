@@ -12,7 +12,17 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 11 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>tl;dr Chebychev Inequality</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/mcmc/2022-06-12-chebychev-tldr</link>
+      <description>Chebychev Inequality proof and use.</description>
+      <category>MCMC</category>
+      <category>Chebychev</category>
+      <guid>https://rsettlage.github.io/mcmc/2022-06-12-chebychev-tldr</guid>
+      <pubDate>Sun, 12 Jun 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>tl;dr Inverse CDF</title>
       <dc:creator>Robert Settlage</dc:creator>
