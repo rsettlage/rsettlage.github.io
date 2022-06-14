@@ -29,8 +29,12 @@
     <lastmod>2022-06-01T20:55:29-04:00</lastmod>
   </url>
   <url>
+    <loc>https://rsettlage.github.io/mcmc/2022-06-13-detailed-balance-proof-tldr/</loc>
+    <lastmod>2022-06-13T20:27:24-04:00</lastmod>
+  </url>
+  <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-12-chebychev-tldr/</loc>
-    <lastmod>2022-06-12T12:26:20-04:00</lastmod>
+    <lastmod>2022-06-13T20:15:45-04:00</lastmod>
   </url>
   <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-11-inverse-cdf-tldr/</loc>
@@ -38,7 +42,11 @@
   </url>
   <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-04-accept-reject-tldr/</loc>
-    <lastmod>2022-06-11T21:06:33-04:00</lastmod>
+    <lastmod>2022-06-13T20:32:26-04:00</lastmod>
+  </url>
+  <url>
+    <loc>https://rsettlage.github.io/mcmc/2022-06-13-ar-digression-tldr/</loc>
+    <lastmod>2022-06-13T21:30:59-04:00</lastmod>
   </url>
   <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-01-monte-carlo-tldr/</loc>
@@ -46,7 +54,7 @@
   </url>
   <url>
     <loc>https://rsettlage.github.io/deeplearning/</loc>
-    <lastmod>2022-06-11T09:14:56-04:00</lastmod>
+    <lastmod>2022-06-13T20:24:06-04:00</lastmod>
   </url>
   <url>
     <loc>https://rsettlage.github.io/teaching/NA-stat5014f2021/</loc>

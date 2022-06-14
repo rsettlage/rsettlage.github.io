@@ -12,7 +12,20 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Sun, 12 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>tl;dr Detailed Balance</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/mcmc/2022-06-13-detailed-balance-proof-tldr</link>
+      <description>Detailed balance description and proof for Gibbs and Metropolis-Hastings .</description>
+      <category>MCMC</category>
+      <category>Detailed Balance</category>
+      <category>Gibbs</category>
+      <category>Metropolis</category>
+      <category>Metropolis-Hastings</category>
+      <guid>https://rsettlage.github.io/mcmc/2022-06-13-detailed-balance-proof-tldr</guid>
+      <pubDate>Mon, 13 Jun 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>tl;dr Chebychev Inequality</title>
       <dc:creator>Robert Settlage</dc:creator>
@@ -42,9 +55,23 @@
       <category>MCMC</category>
       <category>Accept-Reject</category>
       <category>Weighted Bootstrap</category>
+      <category>ideas</category>
       <guid>https://rsettlage.github.io/mcmc/2022-06-04-accept-reject-tldr</guid>
       <pubDate>Sat, 04 Jun 2022 00:00:00 +0000</pubDate>
       <media:content url="https://rsettlage.github.io/mcmc/2022-06-04-accept-reject-tldr/accept-reject-tldr_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Accept-Reject-digression-tldr</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/mcmc/2022-06-13-ar-digression-tldr</link>
+      <description>Accept-Reject intuitive description.</description>
+      <category>MCMC</category>
+      <category>Accept-Reject</category>
+      <category>Weighted Bootstrap</category>
+      <category>ideas</category>
+      <guid>https://rsettlage.github.io/mcmc/2022-06-13-ar-digression-tldr</guid>
+      <pubDate>Sat, 04 Jun 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://rsettlage.github.io/mcmc/2022-06-13-ar-digression-tldr/ar-digression-tldr_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>tl;dr Monte Carlo</title>
