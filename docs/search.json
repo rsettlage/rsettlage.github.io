@@ -33,7 +33,7 @@
       ],
       "date": "`r Sys.Date()`",
       "contents": "\nI like computer simulations. That is like dumb science though. What\nif the computer could actually make decisions. Woah. Perhaps that is a\nlittle too Terminator for where we are at currently, but, how far away\nis that? Probably not terribly far off. As with the MCMC collection, I\nam going to start at the start of my understanding and see where I get.\nI particularly like the adversarial networks and reinforcement learning\nso will likely spend more time on those.\n\n\n\n",
-      "last_modified": "2022-06-11T09:14:56-04:00"
+      "last_modified": "2022-06-13T20:24:06-04:00"
     },
     {
       "path": "index.html",
@@ -54,7 +54,7 @@
         }
       ],
       "contents": "\nComputer simulations have always been my thing. I love Chao Theory,\nFractals, and the like from a computer simulation perspective. I could\ncode some sort of random walk up and just visualize it’s progression ad\nnaseum. This collection is specific to my learning about and exploring\nMonte Carlo methods.\nThe two topics in Monte Carlo methods I like most are Hidden Markov\nmodels and time series methods. I hope to touch on both as this\ncollection matures.\n\n\n\n",
-      "last_modified": "2022-06-12T12:27:05-04:00"
+      "last_modified": "2022-06-20T08:57:50-04:00"
     },
     {
       "path": "publications.html",
@@ -81,7 +81,7 @@
         }
       ],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-06-02T05:16:54-04:00"
+      "last_modified": "2022-06-13T22:00:01-04:00"
     }
   ],
   "collections": ["mcmc/mcmc.json", "deeplearning/deeplearning.json", "teaching/teaching.json", "posts/posts.json", "books/books.json"]

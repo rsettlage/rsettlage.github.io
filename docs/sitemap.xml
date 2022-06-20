@@ -29,6 +29,10 @@
     <lastmod>2022-06-01T20:55:29-04:00</lastmod>
   </url>
   <url>
+    <loc>https://rsettlage.github.io/mcmc/2022-06-14-box-muller-tldr/</loc>
+    <lastmod>2022-06-20T08:57:44-04:00</lastmod>
+  </url>
+  <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-13-detailed-balance-proof-tldr/</loc>
     <lastmod>2022-06-13T20:27:24-04:00</lastmod>
   </url>
@@ -42,11 +46,11 @@
   </url>
   <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-04-accept-reject-tldr/</loc>
-    <lastmod>2022-06-13T20:32:26-04:00</lastmod>
+    <lastmod>2022-06-13T20:32:27-04:00</lastmod>
   </url>
   <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-13-ar-digression-tldr/</loc>
-    <lastmod>2022-06-13T21:48:16-04:00</lastmod>
+    <lastmod>2022-06-13T21:51:15-04:00</lastmod>
   </url>
   <url>
     <loc>https://rsettlage.github.io/mcmc/2022-06-01-monte-carlo-tldr/</loc>
@@ -54,7 +58,11 @@
   </url>
   <url>
     <loc>https://rsettlage.github.io/deeplearning/</loc>
-    <lastmod>2022-06-13T20:24:06-04:00</lastmod>
+    <lastmod>2022-06-20T09:01:12-04:00</lastmod>
+  </url>
+  <url>
+    <loc>https://rsettlage.github.io/teaching/2022-06-13-stat5014f2022/</loc>
+    <lastmod>2022-06-13T22:00:01-04:00</lastmod>
   </url>
   <url>
     <loc>https://rsettlage.github.io/teaching/NA-stat5014f2021/</loc>

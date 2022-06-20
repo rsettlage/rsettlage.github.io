@@ -1,5 +1,32 @@
 [
   {
+    "path": "teaching/2022-06-13-stat5014f2022/",
+    "title": "STAT 5014 Fall 2022",
+    "description": "Introduction to Statistical Computing.  1 credit Graduate course.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-06-13",
+    "categories": [
+      "R",
+      "git",
+      "Markdown",
+      "Latex",
+      "Reproducible Research",
+      "Good Programming Practices",
+      "Keras",
+      "Python",
+      "automation"
+    ],
+    "contents": "\nIntroduction to Statistical Computing\nAug 2022 – Dec 2022\nThis is TBD. Going to add quite a bit more automation this semester\nfor some fun.\nTopics include:\nR and scripting Markdown and Latex\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nAutomation through GitHub actions\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-06-13T22:00:01-04:00",
+    "input_file": "stat5014f2022.knit.md"
+  },
+  {
     "path": "teaching/NA-stat5014f2021/",
     "title": "STAT 5014 Fall 2021",
     "description": "Introduction to Statistical Computing.  1 credit Graduate course.",
