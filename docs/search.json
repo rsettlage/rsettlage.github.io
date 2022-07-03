@@ -19,7 +19,7 @@
       ],
       "date": "`r Sys.Date()`",
       "contents": "\nI am just a stub for now. I may make this it’s own collection of walk\nthroughs or it may just be a series of reviews. Not sure,\npreferences?\nCurrent books within reach of my nightstand:\n+ Hobbs and Hooten - Bayesian Models: A Statistical Primer for\nEcologists\n+ Gelman - Baysian Data Analysis\n+ Goodfellow - Deep Learning\n+ Chollet - Deep Learning with Python\n+ Raschka - Python Machine Learning\n+ Lanz - Machine Learning with R\n+ Auffarth - Machine Learning for Time-Series with Python\n\n\n\n",
-      "last_modified": "2022-06-02T09:54:29-04:00"
+      "last_modified": "2022-07-03T08:38:22-04:00"
     },
     {
       "path": "deeplearning.html",
@@ -33,7 +33,7 @@
       ],
       "date": "`r Sys.Date()`",
       "contents": "\nI like computer simulations. That is like dumb science though. What\nif the computer could actually make decisions. Woah. Perhaps that is a\nlittle too Terminator for where we are at currently, but, how far away\nis that? Probably not terribly far off. As with the MCMC collection, I\nam going to start at the start of my understanding and see where I get.\nI particularly like the adversarial networks and reinforcement learning\nso will likely spend more time on those.\n\n\n\n",
-      "last_modified": "2022-06-13T20:24:06-04:00"
+      "last_modified": "2022-06-20T09:14:33-04:00"
     },
     {
       "path": "index.html",

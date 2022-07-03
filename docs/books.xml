@@ -12,6 +12,17 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Thu, 02 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 02 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Hobbs-Hooten Chapter 1</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/books/2022-07-02-hobbs-hooten-ch1</link>
+      <description>A quick summary of Hobbs and Hooten's Bayesian Models, Chapter 1.</description>
+      <category>Bayesian modeling</category>
+      <category>Bayesian networks</category>
+      <guid>https://rsettlage.github.io/books/2022-07-02-hobbs-hooten-ch1</guid>
+      <pubDate>Sat, 02 Jul 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://rsettlage.github.io/books/2022-07-02-hobbs-hooten-ch1/./images/HH_fig1.2.1.png" medium="image" type="image/png" width="544" height="244"/>
+    </item>
   </channel>
 </rss>
