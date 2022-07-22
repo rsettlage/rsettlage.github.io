@@ -12,7 +12,17 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 17 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Importance-sampling-tldr</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/mcmc/2022-07-12-importance-sampling-tldr</link>
+      <description>A short introction to Importance Sampling.</description>
+      <category>MCMC</category>
+      <category>Importance Sampling</category>
+      <guid>https://rsettlage.github.io/mcmc/2022-07-12-importance-sampling-tldr</guid>
+      <pubDate>Tue, 12 Jul 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Box-Muller-tldr</title>
       <dc:creator>Robert Settlage</dc:creator>

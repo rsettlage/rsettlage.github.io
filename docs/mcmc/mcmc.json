@@ -1,5 +1,25 @@
 [
   {
+    "path": "mcmc/2022-07-12-importance-sampling-tldr/",
+    "title": "Importance-sampling-tldr",
+    "description": "A short introction to Importance Sampling.",
+    "author": [
+      {
+        "name": "Robert Settlage",
+        "url": {}
+      }
+    ],
+    "date": "2022-07-12",
+    "categories": [
+      "MCMC",
+      "Importance Sampling"
+    ],
+    "contents": "\n\nContents\nQuestion 1: What does\n(3) converge to?\nQuestion 2a: Which g()\nshould we pick?\nQuestion 2b: is\nthere an optimal g()? YES\n\nThis one is a little (lot?) long. I hope I can condense it to a\ncard.\nFirst, recall we might want to solve:\n\\[\n\\begin{equation}\n\\tag{1}\nE_f[h(x)] = \\int_x h(x) f(x) dx \\approx \\frac{1}{N} \\sum_{x_i \\sim f}\nh(x)\n\\end{equation}\n\\]\nThis works if \\(\\int f(x) dx = 1\\),\nie \\(f(x)\\) is a proper distribution.\nIf not, we can do:\n\\[\n\\begin{equation}\n\\tag{2}\nE_f[h(x)] = \\int_x h(x) \\frac{c f(x)}{c} dx \\approx \\frac{c}{N}\n\\sum_{x_i \\sim f/c} h(x)\n\\end{equation}\n\\]\nwhere \\(\\int f(x) dx = c \\lt\n\\infty\\). So, what if we have a proposal function \\(g(x)\\) such that \\(\\Omega_f \\le \\Omega_g\\). Well,\n\\[\n\\begin{equation}\n\\tag{3}\nE_f[h(x)] = \\int_x h(x) f(x) dx = \\int_x h(x) \\frac{f(x) g(x)}{g(x)} dx\n\\approx \\frac{1}{N} \\sum_{x_i \\sim g} h(x) \\frac{f(x)}{g(x)}\n\\end{equation}\n\\]\nQuestion 1: What does (3)\nconverge to?\nIf it converges, it converges to \\(E_f[h(x)]\\).\nQuestion 2a: Which g()\nshould we pick?\nthe one that minimizes the variance\n\\[\n\\begin{eqnarray}\n\\tag{4}\nmin\\ E_g\\left [ \\left( h(x) \\frac{f(x)}{g(x)}\\right)^2\\right]\n&=& \\int_x h^2(x)\\frac{f^2(x)}{g^2(x)}g(x) dx \\\\\n  &=& \\int_x h^2(x)\\frac{f(x)}{g(x)} f(x) dx \\\\\n  &=& E_f\\left [ h^2(x) \\frac{f(x)}{g(x)}\\right]\n\\end{eqnarray}\n\\]\nNote, if the importance rate, \\[\n\\frac{f(x)}{g(x)} \\le M \\lt \\infty \\], then\n\\[\n\\begin{equation}\n\\tag{5}\nE_f\\left [ h^2(x) \\frac{f(x)}{g(x)}\\right] \\le M\\ast E[h^2(x)] \\lt\n\\infty\n\\end{equation}\n\\] defines tail dominance.\nQuestion 2b: is there an\noptimal g()? YES\nTheorem\nThis is optimal:\n\\[\n\\begin{equation}\n\\tag{6}\ng(x) = g^{\\ast}(x) = \\frac{\\mid h(x) \\mid f(x)}{\\int \\mid h(x) \\mid f(x)\ndx}\n\\end{equation}\n\\]\nProof\n\\[\n\\begin{equation}\n\\tag{7}\nVar_g\\left(h(x)\\frac{f(x)}{g(x)}\\right) = E_g \\left[ \\left( h(x)\n\\frac{f(x)}{g(x)}\\right)^2 \\right] - E_g\\left [ h(x)\n\\frac{f(x)}{g(x)}\\right]^2\n\\end{equation}\n\\]\nRemembering Jensen’s Inequality:\n\\[\n\\begin{eqnarray}\nE_g\\left [ h^2(x) \\frac{f^2(x)}{g^2(x)}\\right] &\\ge & E_g\\left [\n\\mid h(x)\\mid \\frac{f(x)}{g(x)}\\right]^2 \\\\\n  &\\ge & \\left( \\int_g \\mid h(x)\\mid \\frac{f(x)}{g(x)} g(x)\ndx\\right)^2 \\\\\n  \\tag{8}\n  &\\ge & \\left( \\int_g \\mid h(x)\\mid f(x) dx\\right)^2\n\\end{eqnarray}\n\\] IS the lower bound.\nCan we reach the lower bound?? Plug (6) into \\[E_g \\left[ \\left( h(x) \\frac{f(x)}{g(x)}\\right)^2\n\\right]\\]\nYES, and optimal!!\nNOTE the concept of\neffective sample size\nTo use (6), we need to evaluate the integral in the denominator. BUT,\nthat is as hard as the original problem. However, recall:\n\\[\n\\begin{equation}\n\\tag{9}\nE_f[h(x)] = \\int h(x) f(x) dx \\approx \\sum_g h(x)\\frac{f(x)}{g(x)}\n\\equiv \\sum_g h(x) \\omega (x)\n\\end{equation}\n\\]\nwhich is just a weighted average. Remembering \\(E_g[w(x)]=1\\), we could also use:\n\\[\n\\begin{equation}\n\\tag{10}\nE_f[h(x)] = \\approx \\frac{\\sum_g h(x)\\omega (x)}{\\sum_g \\omega (x)}\n\\end{equation}\n\\]\nFinally, don’t forget the effective sample size (ESS):\n\\[\n\\begin{equation}\n\\tag{11}\nESS = \\frac{N}{1+Var_g(\\omega (x))}\n\\end{equation}\n\\]\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-07-16T08:59:55-04:00",
+    "input_file": {}
+  },
+  {
     "path": "mcmc/2022-06-14-box-muller-tldr/",
     "title": "Box-Muller-tldr",
     "description": "A short introction to Box-Muller to generate two independent random normals.",

@@ -12,12 +12,21 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 02 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Hobbs-Hooten Chapter 2</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/books/2022-07-03-hobbs-hooton-ch2</link>
+      <description>A quick summary of Hobbs and Hooten's Bayesian Models, Chapter 2 -- Deterministic Models.</description>
+      <category>Deterministic models</category>
+      <guid>https://rsettlage.github.io/books/2022-07-03-hobbs-hooton-ch2</guid>
+      <pubDate>Sun, 03 Jul 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Hobbs-Hooten Chapter 1</title>
       <dc:creator>Robert Settlage</dc:creator>
       <link>https://rsettlage.github.io/books/2022-07-02-hobbs-hooten-ch1</link>
-      <description>A quick summary of Hobbs and Hooten's Bayesian Models, Chapter 1.</description>
+      <description>A quick summary of Hobbs and Hooten's Bayesian Models, Chapter 1 -- Preview.</description>
       <category>Bayesian modeling</category>
       <category>Bayesian networks</category>
       <guid>https://rsettlage.github.io/books/2022-07-02-hobbs-hooten-ch1</guid>
