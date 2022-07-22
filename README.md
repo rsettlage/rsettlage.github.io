@@ -2,4 +2,4 @@
 
 To navigate to the rendered site:
 
-[rsettlage.githut.io](https://rsettlage.github.io)
+[rsettlage.github.io](https://rsettlage.github.io)
