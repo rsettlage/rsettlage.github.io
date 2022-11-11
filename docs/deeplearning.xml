@@ -12,7 +12,19 @@
       <link>https://rsettlage.github.io/</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 01 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 04 Nov 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Fun with H2O and LIME</title>
+      <dc:creator>Robert Settlage</dc:creator>
+      <link>https://rsettlage.github.io/deeplearning/2022-11-04-fun-with-h2o</link>
+      <description>Quick posting showing use of H2O.</description>
+      <category>DeepLearning</category>
+      <category>H2O</category>
+      <category>LIME</category>
+      <guid>https://rsettlage.github.io/deeplearning/2022-11-04-fun-with-h2o</guid>
+      <pubDate>Fri, 04 Nov 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://rsettlage.github.io/deeplearning/2022-11-04-fun-with-h2o/fun-with-h2o_files/figure-html5/eda-stage-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>DeepLearning Inspiration</title>
       <dc:creator>Robert Settlage</dc:creator>
