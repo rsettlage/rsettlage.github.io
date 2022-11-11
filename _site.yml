@@ -45,9 +45,9 @@ navbar:
       href: books.html
     - text: "Musings"
     - menu:
-      - text: "MCMC"
+      - text: "MCMC tl;dr"
         href: mcmc.html
-      - text: "DeepLearning"
+      - text: "DeepLearning tl;dr"
         href: deeplearning.html
     - text: "About me"
       href: about.html
