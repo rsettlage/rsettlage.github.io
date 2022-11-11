@@ -2567,7 +2567,7 @@ d-appendix d-footnote-list a.footnote-backlink {
 <p>This is a quick post to show use of H2O as an automl tool. As stated in the docs (<a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/welcome.html" class="uri">https://docs.h2o.ai/h2o/latest-stable/h2o-docs/welcome.html</a>), H2O is an open source, distributed, fast and scalable machine learning platform written in Java. It supports many different supervised and unsupervised algorithms. I am interested in how optimum the generated models are. Here I will just demonstrate the use of the platform, compare to a quick GLM, and will end by showing LIME for explanation of model outcomes.</p>
 <p>For the demo dataset, I am using the Palmer Penguins dataset. This dataset has 344 measurements of penguin physical characteristics along with labels for sex, species, location and year of the measurement. For this demonstration, I will see what H2O can accomplish in predicting sex from the other attributes. First, some EDA just to get a sense of what the dataset looks like:</p>
 <h2 id="eda">EDA</h2>
-<div class="layout-chunk" data-layout="l-body">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># love the skimr package, quick look shows some missing values and distributions</span></span>
 <span><span class='fu'><a href='https://docs.ropensci.org/skimr/reference/skim.html'>skim</a></span><span class='op'>(</span><span class='fu'>palmerpenguins</span><span class='fu'>::</span><span class='va'><a href='https://allisonhorst.github.io/palmerpenguins/reference/penguins.html'>penguins</a></span><span class='op'>)</span></span></code></pre>
@@ -2959,7 +2959,7 @@ Scaling for all_numeric_predictors()</code></pre>
 <h3 id="model-performance">Model performance</h3>
 <p>Model performance is a highly technical discussion I am avoiding here. What I instead want to highlight is how to get to the performance metrics H2O gives access to. First, for classification problems like our example, the confusion matrix is a good first indicator of performance.</p>
 <p>AutoML best model:</p>
-<div class="layout-chunk" data-layout="l-body">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/h2o/man/h2o.confusionMatrix.html'>h2o.confusionMatrix</a></span><span class='op'>(</span><span class='va'>best_model_results</span><span class='op'>)</span></span></code></pre>
 </div>
@@ -2970,7 +2970,7 @@ male        1  151 0.006579  =1/152
 Totals    147  152 0.006689  =2/299</code></pre>
 </div>
 <p>GLM model:</p>
-<div class="layout-chunk" data-layout="l-body">
+<div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/h2o/man/h2o.confusionMatrix.html'>h2o.confusionMatrix</a></span><span class='op'>(</span><span class='va'>pengiun_glm</span><span class='op'>)</span></span></code></pre>
 </div>
@@ -3132,7 +3132,7 @@ Confusion Matrix
 
 
 
-GLM_model_R_1668131819232_38656
+GLM_model_R_1668131819232_38796
 -------------------------------
 
 |  | female | male | Error | Rate
