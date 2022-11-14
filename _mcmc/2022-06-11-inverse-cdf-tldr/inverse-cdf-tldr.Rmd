@@ -1,0 +1,204 @@
+---
+title: "tl;dr Inverse CDF"
+description: |
+  Monte Carlo using the Inverse CDF.
+draft: false
+categories: [MCMC, Inverse CDF]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-11
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+Summary of the Inverse CDF method for generating draws from a distribution given draws from a random uniform. 
+
+## Proposition
+
+The random variable $Y=F^{-1}(u)$, where $F$ is a distribution function and $u\sim unif(0,1)$, will have distribution $F$.
+
+
+## Proof
+
+I like the proof that this is true.  It is truly simple:
+
+Let $G_Y(y)$ be a distribution function for Y.  Then:
+
+$$
+\begin{eqnarray}
+\tag{1}
+G_Y(\alpha) &=& Pr(y \le \alpha) \\
+  &=& Pr(F^{-1}(u) \le \alpha) \\
+  &=& Pr(u \le F(\alpha)) \\
+  &=& F(\alpha)
+\end{eqnarray}
+$$
+
+## Example 1
+
+Generate samples from $x\sim exp(\lambda)$ using draws from $u\sim unif(0,1)$.
+
+
++ Step 1: Find CDF
+
+$$
+\begin{equation}
+\tag{2}
+F(\alpha) = \int_0^{\alpha} \lambda e^{-\lambda x} dx = e^{-\lambda x} \mid_0^{\alpha} = 1-e^{\lambda\alpha}
+\end{equation}
+$$
+
++ Step 2: Find invserse CDF
+
+let $g=1-e^{\lambda\alpha}$
+
+$$
+\begin{eqnarray}
+\tag{3}
+g &=& 1-e^{\lambda\alpha} \\
+e^{-\lambda \alpha}  &=& 1-g \\
+\alpha &=& -\frac{1}{\lambda}log(1-g) \\
+F^{-1}(\alpha) &=& -\frac{1}{\lambda}log(1-\alpha)
+\end{eqnarray}
+$$
+
++ Step 3: Generate Y
+
+draw $u_i \sim unif(0,1)$, now, $Y=-\frac{1}{\lambda}log(1-u) \sim exp(\lambda)$
+
+## Example 2
+
+What if the desired distribution is discrete?  For instance, $bern(p)$.
+
+$$
+\begin{equation}
+\tag{4}
+x \sim 
+\begin{cases}
+1 \text{ with probability } p \\
+0 \text{ with probability } 1-p
+\end{cases}
+\end{equation}
+$$
+Graphically, this looks like:
+
+```{r bern_graph, echo=TRUE, include=TRUE}
+#for graphing, choose arbitrary p=0.6
+p=0.75
+
+# Create empty example plot
+plot(0, 0, col = "white", xlab = "y", ylab = "u", xlim=c(0,2), ylim=c(0,1), xaxt="n", yaxt="n")
+axis(1, at=c(0.5,1.5),labels=c("0","1"), col.axis="red", las=1)
+axis(2, at=c(1-p,p),labels=c("1-p","p"), col.axis="red", las=2)
+# Draw one line
+segments(x0 = 0, y0 = 1-p, x1 = 1-0.03, y1 = 1-p, col = "red",lwd=2)
+segments(x0 = 1, y0 = p, x1 = 2, y1 = p, col = "blue",lwd=2)
+segments(x0 = 1, y0 = 1-p+0.06, x1 = 1, y1 = p, col = "black",lwd=2, lty="dotted")
+points(1,1-p,pch=1,col="red",cex=2)
+points(1,p,pch=20,col="blue",cex=2)
+text(0.5,0.3,"1-p")
+text(1.5,0.8,"p")
+```
+
+This is relatively easy:
+
++ Step 1: 
+draw $u_i \sim unif(0,1)$
+
++ Step 2:
+
+$$
+\begin{equation}
+\tag{4}
+y = 
+\begin{cases}
+0 \text{ if } u \lt 1-p \\
+1 \text{ otherwise }
+\end{cases}
+\end{equation}
+$$
+
+## Example 3
+
+An approximate CDF can also be generated in the same way.  Think of this as a discretized continuous random variable.
+
+Suppose we want to generate $y\sim N(0,1)$.
+
+$$
+\begin{equation}
+\tag{4}
+f(y_i) = 
+\begin{cases}
+f(y_0) \text{ if } f(y_0) \le u \lt f(y_1) \\
+f(y_1) \text{ if } f(y_1) \le u \lt f(y_2) \\
+f(y_2) \text{ if } f(y_2) \le u \lt f(y_3) \\
+\vdots
+\end{cases}
+\end{equation}
+$$
+
+Graphically, this starts to look like:
+
+```{r desc_norm_graph, echo=TRUE, include=TRUE}
+# function for arbitrary pdf
+pdf <- function(x){
+  y <- (1/(2*pi))*exp(-0.5*x^2)
+}
+par(mfcol=c(1,2))
+
+## PDF
+plot(0, 0, col = "white", xlab = "", ylab = "", xlim=c(-4,4), ylim=c(0,0.2), main="Discretized PDF")
+curve(pdf, from=-4, to=4, xlab="x", ylab="y", add=TRUE)
+segments(x0 = -2, y0 = 0, x1 = -2, y1 = pdf(-2), col = "red",lwd=2)
+segments(x0 = -1.75, y0 = 0, x1 = -1.75, y1 = pdf(-1.75), col = "red",lwd=2)
+segments(x0 = -1.5, y0 = 0, x1 = -1.5, y1 = pdf(-1.5), col = "red",lwd=2)
+segments(x0 = -1.25, y0 = 0, x1 = -1.25, y1 = pdf(-1.25), col = "red",lwd=2)
+segments(x0 = -1, y0 = 0, x1 = -1, y1 = pdf(-1), col = "red",lwd=2)
+
+# CDF
+plot(0, 0, col = "white", xlab = "", ylab = "u", xlim=c(-2,0), ylim=c(0,0.2),main="Inverse CDF step function")
+segments(x0 = -2, y0 = pdf(-2), x1 = -1.75, y1 = pdf(-2), col = "red",lwd=2)
+segments(x0 = -1.75, y0 = pdf(-1.75), x1 = -1.5, y1 = pdf(-1.75), col = "red",lwd=2)
+segments(x0 = -1.5, y0 = pdf(-1.5), x1 = -1.25, y1 = pdf(-1.5), col = "red",lwd=2)
+segments(x0 = -1.25, y0 = pdf(-1.25), x1 = -1, y1 = pdf(-1.25), col = "red",lwd=2)
+segments(x0 = -1, y0 = pdf(-1), x1 = -0.75, y1 = pdf(-1), col = "red",lwd=2)
+points(y = pdf(-2), x = -1.75,pch=1,col="red")
+points(y = pdf(-1.75), x = -1.5,pch=1,col="red")
+points(y = pdf(-1.5), x = -1.25,pch=1,col="red")
+points(y = pdf(-1.25), x = -1,pch=1,col="red")
+points(y = pdf(-1), x = -0.75,pch=1,col="red")
+
+```
+
+To get the final points, they must be normalized by the total of the draws:
+
+$$
+\begin{equation}
+f(y_i) = \frac{e^{-\frac{1}{2}y_i^2}}{\sum_{j=0}^N e^{-\frac{1}{2}y_j^2}} 
+\end{equation}
+$$
+
+
+
+
+
+

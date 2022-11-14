@@ -1,0 +1,217 @@
+---
+title: "tl;dr Monte Carlo"
+description: |
+  Basic Monte-Carlo description and theory.
+draft: false
+categories: [MCMC]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-01
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+Monte-Carlo summary.  Much of this is following notes from Scotland Lemon's MCMC class in Spring 2017 at Virginia Tech.
+
+## Monte Carlo
+
+Class or set of algorithms to produce a random and approximate solution
+to a problem in a $\textbf{fixed}$ amount of time. As opposed to Las
+Vegas algorithms that produce a solution of fixed tolerance in an
+unknown amount of time.
+
+Monte Carlo methods rely on sampling $iid$ from the distribution to then compute the estimate.  The class and what I am interested in more are random walks where the next sample is dependent on the current sample.  This is more aptly described as Markov Chain Monte Carlo.
+
+### General idea
+
+if $x\sim p(x)$, where we can sample from $p(x)$, but we want $g(x)$,
+then
+
+$$
+\begin{eqnarray}
+\tag{1}
+E[g(x)] &=& \int_{\Omega_x}g(x)p(x)dx \\
+  &\approx& \frac{\sum g(x)}{N} \text{where }x_i\sim p(x)
+\end{eqnarray}
+$$
+
+## Example 1
+
+We want $E[u]$ where $u\sim unif[0,1]$.  The pdf of x is
+
+$$
+\begin{equation}
+\tag{2}
+x \sim 
+\begin{cases}
+1 \text{ if } 0 \le u \le 1 \\
+0 \text{ otherwise}
+\end{cases}
+\end{equation}
+$$
+So we could do this analytically as:  
+
+$$
+\begin{equation}
+\tag{3}
+E[u] = \int_0^1 u\;p(u)\;du = \frac{u^3}{2} \mid _0^1 = \frac{1}{2}\text{ similarly, var}(u)=\frac{1}{12}
+\end{equation}
+$$
+Alternatively, using Monte-Carlo approximation, we would follow:
+
+1. init $u_0 = runif(1)$  
+2. for $i=1:N$  
+     $u_i = runif(1)$  
+   end
+
+Now:  
+
+$$
+\begin{eqnarray}
+\tag{4}
+mean(u) &=& \frac{\sum_{i=1}^N u_i}{N} \approx \int_0^1 u\;p(u)\;du \\
+\tag{5}
+Var(u) &=& \frac{\sum_{i=1}^N (u_i-E[u])^2}{N} \approx \int_0^1 (u_i-E[u])^2\;p(u)\;du
+\end{eqnarray}
+$$
+
+Quick try with N going from 100 to 10,000:  
+
+```{r calc_mean_u, echo=TRUE, eval=TRUE}
+set.seed(12475)
+draws <- runif(10000)
+results <- data.frame(means=rbind(mean(draws[1:100]),mean(draws[1:1000]),mean(draws)),
+                      vars=rbind(var(draws[1:1000]),var(draws[1:100]),var(draws)),
+                      row.names = c("100","1,000","1,0000"))
+kable(results,digits = 4)
+```
+
+Looks like the mean is approaching the desired value of 0.5.
+
+## Example 2
+
+$x\sim N(\mu=10, \sigma^2=1)$  
+
+Want $E[x^4]$:  
+
+$$
+\begin{equation}
+\tag{6}
+E[x^4] = \int_{-\infty}^{\infty} x^4\;p(x)\;dx = \int_{-\infty}^{\infty}x^4\;\frac{1}{\sqrt{2\pi}}e^{-\tfrac{(x-E[x])^2}{2}}\;dx = ??
+\end{equation}
+$$
+We may be able to do this integral using some tricks, but instead, perhaps use Monte Carlo:
+
+1. init $x_0 = rnorm(10,1)$  
+2. for $i=1:N$  
+     $x_i = rnorm(10,1)$  
+   end
+
+Now: 
+
+$$
+\begin{equation}
+\tag{7}
+E[X^4] \approx \frac{\sum_{x_i\sim N(10,1)}x_i^4}{N}
+\end{equation}
+$$
+
+```{r calc_mean_x4, echo=TRUE, eval=TRUE}
+set.seed(12475)
+draws <- rnorm(10000,10,1)^4
+results <- data.frame(means=rbind(mean(draws[1:100]),mean(draws[1:1000]),mean(draws)),
+                      row.names = c("100","1,000","1,0000"))
+kable(results,digits = 4)
+```
+
+It appears to be converging to what we would hope would be close to 10k.
+
+## Example 3
+
+$x\sim exp(\lambda)$
+
+Want:  
+
+$E[e^{sin(x)}]$ where $0 \le x \le \pi$
+
+$$
+\begin{eqnarray}
+\tag{8}
+E[e^{sin(x)}\mid 0 \le x \le \pi] &=& \int_0^{\pi} e^{sin(x)} \lambda e^{-\lambda x} dx \\
+  &=& \int_0^{-\infty} \delta(x)_{[0,\pi]}e^{sin(x)} \lambda e^{-\lambda x} dx \\
+  &\approx& \frac{1}{N}\sum_{x_i \sim exp(\lambda)} \delta(x)_{[0,\pi]}e^{sin(x)}
+\end{eqnarray}
+$$
+
+The key here is the N is from samples of $x_i$ that pass the criteria, ie pass the delta function.
+
+## Bias, variance and convergence
+
+Couple things to clean up to close, is the estimate biased and how does it converge?  For this, let's assume we are looking at 
+
+$u\stackrel{iid}{\sim}unif(0,1)\text{; i=1..N}$
+
+$E[u]\approx \frac{\sum_{u_i\stackrel{iid}{\sim}unif(0,1)}u_i}{N}=\hat{M}$ and similar for variance.
+
+
+### Bias
+
+Is the estimate biased?
+
+$$
+\begin{eqnarray}
+\tag{8}
+E[\hat{M}] &=& E\left[\frac{\sum_{i=1}^Nu_i}{N}\right] \\
+  &=& \frac{\sum_{i=1}^N E[u_i]}{N} \\
+  &=& \frac{\sum_{i=1}^N E[u]}{N} \text{ b/c iid}\\
+  &=& E[u] \\
+  &=& M
+\end{eqnarray}
+$$
+
+
+
+$$
+\begin{eqnarray}
+\tag{9}
+Var[\hat{M}] &=& Var\left[\frac{\sum_{i=1}^Nu_i}{N}\right] \\
+  &=& \frac{\sum_{i=1}^N Var[u_i]}{N^2} \\
+  &=& \frac{\sum_{i=1}^N Var[u]}{N^2} \text{ b/c iid}\\
+  &=& \frac{Var[u]}{N} \\
+  &\xrightarrow[]{N\rightarrow \infty}& 0
+\end{eqnarray}
+$$
+
+
+So our estimate is unbiased with zero variance.  Can we say anything about convergence in probability?
+
+$$
+\begin{eqnarray}
+\tag{10}
+Pr(\mid \hat{M}-M \mid \lt \epsilon) &=& Pr\left(\mid \hat{M}-M \mid \lt \delta \cdot \sqrt{V/N}\right) \text{ where V=Var(M)} \\
+  &=& Pr\left(\frac{\mid \hat{M}-M \mid}{\sqrt{V/N}} \lt \delta\right) \text{note this is }N(0,1)\lt\delta\\
+  &\approx& Pr\left(\frac{\mid \hat{M}-M \mid}{\sqrt{\hat{V}/N}} \lt \delta\right) \text{note }\hat{V}\text{ is sample estimate of variance, now this is }t(0,1)\lt\delta
+\end{eqnarray}
+$$
+
+And by the CLT, we can make probabilistic statements.  We also note our probabilistic error bound only depends on N through $\sqrt{\frac{V}{N}}\approx\sqrt{\frac{\hat{V}}{N}}$ so that for any dimensional problem, the error descreases at the rate of $N^{-\tfrac{1}{2}}$ such that we are $O(N^{-\tfrac{1}{2}})$ convergence.
+

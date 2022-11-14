@@ -1,0 +1,160 @@
+---
+title: "Hobbs-Hooten Chapter 2"
+description: |
+  A quick summary of Hobbs and Hooten's Bayesian Models, Chapter 2 -- Deterministic Models.
+draft: false
+categories: [Deterministic models]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-07-03
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+Distillation of Chapter 2 from Hobbs and Hooten.  (While a distillation, some sentences are so concise as to warrant taking verbatim.  Please excuse the lack of quotes as an oversight.)  The authors give our goal as "combining data with models to provide insight about ecology by answering a fundamental question: what is the probability I that I will observe the data if the model faithfully represents the processes that give rise to the data?"  The starting point in the book is given as considering the ecological process by writing a deterministic equation(s).  This is given as the "Design" phase where we combine existing theory with our objectives and intuition to create a model we can combine with existing or future data.  The authors start by recognizing three styles of modeling traditions in ecology they call theoretical, empirical, and simulation.
+
+## Theoretical models
+
+These ideas come from mathematical analysis of systems of deterministic, nonlinearl differential, and difference equations.  This is a no data required approach through which insight is derived from the mathematical properties of equilibrium points and local stability conditions etc.  They need to be simplistic due to the intractability of nonlinear systems.  These models have as a strength that the parameters are defined in biological terms and they symbolically represent how a process works.  The derived hypothesis are often tested through empirical models.
+
+## Empirical models
+
+These models describe relationships in data.  They depend on a deterministic model, but are often linear models.  The parameters are lacking in portability and biological interpretation.  The strength of these models comes from the rigorous treatment of uncertainty even if they lack complexity.  
+
+## Simulation models
+
+Simulation models allow exploration and modeling of complex systems involving many parameters and interactions.  Through simulation, the ecologist can explore the state space across many spatial scales and levels of organization.  
+
+
+The authors note that each of the modeling modes have strengths and what we need to do is merge the styles.  This book uses the Baysian Hierarchical framework to do just that.
+
+## Deterministic functions highlighted
+
+A deterministic model is a function, $g()$, that returns and output $\mu$ representing the true state $z$ based on parameters ($\theta_p$) and observations ($\mathbf{x}$):
+
+$$
+\begin{equation}
+\tag{1}
+\mu = g(\theta_p,\mathbf{x})
+\end{equation}
+$$
+
+Care will be taken to make sure the range and domains of outpus and inputs (respectively) are maintained.
+
+### Functions of additive effects
+
+#### The simple linear model:
+
+$$
+\begin{equation}
+\tag{2}
+g(\underline{\smash{\beta}},\mathbf{x}) = \beta_0 + \beta_1 x_1 + \dots + \beta_n x_n
+\end{equation}
+$$
+
+Noting that interactions can be expressed through product terms and curvilinear terms through powers of $x$.  Note that the range is all real numbers.
+
+#### Exponential 
+
+$$
+\begin{equation}
+\tag{2}
+g(\underline{\smash{\beta}},\mathbf{x}) = e^{\beta_0 + \beta_1 x_1 + \dots + \beta_n x_n}
+\end{equation}
+$$
+This is useful in mapping the range to (0,$\infty$).
+
+#### Inverse logit
+
+$$
+\begin{equation}
+\tag{3}
+g(\underline{\smash{\beta}},\mathbf{x}) = \frac{e^{\beta_0 + \beta_1 x_1 + \dots + \beta_n x_n}}{1 + e^{\beta_0 + \beta_1 x_1 + \dots + \beta_n x_n}}
+\end{equation}
+$$
+This is useful in modeling proportions by mapping the range to (0,1).  This function is the inverse of the logit function:
+
+$$
+\begin{equation}
+\tag{4}
+logit(p) = ln\left ( \frac{p}{1-p}\right )
+\end{equation}
+$$
+### Power functions
+
+$$
+\begin{eqnarray}
+\tag{5}
+g(\underline{\smash{\beta},x}) &=& \beta_0x^{\beta_1} \text{ or transformed: }\\
+\tag{6}
+ln(g(\underline{\smash{\beta},x})) = ln(\mu ) &=& ln(\beta_0) + \beta_1 ln(x)
+\end{eqnarray}
+$$
+
+additional $\beta$'s can be included as needed.
+
+### Asymptotic functions
+
+The Mechaelis-Menten equation:
+
+$$
+\begin{equation}
+\tag{7}
+g(\nu_{max},k,x) = \frac{\nu_{max}x}{k+x}
+\end{equation}
+$$
+Raising x and k to the power of q gives the Hill function.  If $\nu_{max}=\frac{1}{\gamma}$ and $k=\frac{1}{\alpha\gamma}$, then you arrive at the Type II functional response.
+
+Others include:
+
+Monomolecular function:
+
+$$
+\begin{equation}
+\tag{8}
+g(\alpha, \gamma, x) = \alpha(1-e^{-\gamma x})
+\end{equation}
+$$
+
+Gompertz function:
+
+$$
+\begin{equation}
+\tag{9}
+g(\alpha, \gamma, x) = e^{-\alpha e^{-\gamma x}}
+\end{equation}
+$$
+
+### Thresholds
+
+Many situations arise where there is an inflection point, $\tau$, where the dynamics of the model switch between behaviors:
+
+$$
+\begin{equation}
+\tag{8}
+\mu = \begin{cases}
+g_1(\mathbf{\theta}_1,x) \text{ if } x \lt \tau \\
+g_2(\mathbf{\theta}_2,x) \text{ otherwise } x \ge \tau
+\end{cases}
+\end{equation}
+$$

@@ -1,0 +1,200 @@
+---
+title: "Hobbs-Hooten Chapter 1"
+description: |
+  A quick summary of Hobbs and Hooten's Bayesian Models, Chapter 1 -- Preview.
+draft: false
+categories: [Bayesian modeling, Bayesian networks]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-07-02
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+I absolutely love this book.  It is approachable and thorough.  I am in my second work through of the book and will just give the most brief notes here.  Besides the parallels between Picaso and Box, my favorite line in the book is "your science will have impact to the extent that you are able to ask important questions and provide compelling answers to them".  I have always thought you should ask first the question you want answered, then think about how you should go about gathering data to answer it.  That hones the study to something achievable.  In my write up, there are definitely phrases stolen, so consider this entire write up referenced.  
+
+
+![Hobbs Hooten](https://pup-assets.imgix.net/onix/images/9780691159287.jpg){width=20%}
+
+@book{10.2307/j.ctt1dr36kz,  
+   URL = {http://www.jstor.org/stable/j.ctt1dr36kz},  
+   abstract = {This textbook provides a comprehensive and accessible introduction to the latest Bayesian methods-in language ecologists can understand.},  
+   author = {N. Thompson Hobbs and Mevin B. Hooten},  
+   edition = {STU - Student edition},  
+   publisher = {Princeton University Press},  
+   title = {Bayesian Models: A Statistical Primer for Ecologists},  
+   urldate = {2022-07-02},  
+   year = {2015}  
+}
+
+## Chapter 1
+
+This is really setting the stage for the whole book. The main idea is that an analysis of data tracks uncertainty through mathmatical modeling of the phenomena being observed to gain insight into the system.  They break the process 4 main steps (stated in preface):
+
++ Design  
+  Here existing theory, scientific objectives and intuition combine to help write a deterministic model of the process  
++ Model Specification  
+  Diagram the relationship(s) between observed and unobserved quantities, use these relationships to write out the posterior using general probability notation, and finally choose the appropriate probability distributions for the quantities  
++ Model implementation  
+  Write full-conditional distribusions, write MCMC sampling algorithm, test MCMC on simulated data, run MCMC algorithm on real data  
++ Model evaluation and inference  
+  Posterior predictive checks include probablistic inference from a single model and/or model selection and model averaging.
+  
+Hobbs and Hooten sketch out the framework for modelling as creating a series of submodels that are chained to gether, Bayesian style.  These models include: process models, sampling models, observational models, and parameter models.
+
+### Process models
+
+Process models are mathematical statemensts that depict a process and our uncertainty about that process.  Here we start by thinking about a true state ($z$) and are looking to understand influencers of the state, ie the things that make it change.  To the modeler, this will be a combination of a deterministic statement with realizations of uncertainty.  The deterministic part relates what we know or can measure to our understanding of the system.  We add uncertainty because we know we have omitted in our simplifications.
+
+$$
+\begin{equation}
+\tag{1}
+\left [ z \mid g(\theta_p, \mathbf{x}), \sigma_p^2 \right ]
+\end{equation}
+$$
+
+### Sampling models
+
+First, we realize that in most studies, we can not observe all instances of the true state of the system so we need to take samples from the system.  The authors use $u_i$ where $i = 1 \dots n$ denote the observations taken.
+
+$$
+\begin{equation}
+\tag{2}
+\left [ u_i \mid z, \sigma_s^2 \right ]
+\end{equation}
+$$
+
+### Observation models
+
+There is often a mismatch between what we observe and the true state, kinda a bias. The authors call this an observation model, I would call it a measurement model.  Note that if we can observe perfectly samples from the true state, $y_i = u_i$, ie we do not need an observational model and our sampling model (and associated sampling uncertainty) are enough to describe our observations.
+
+### Parameter models
+
+We have include parameters in our models that require some sort of understanding.  We represent the parameters using probability distributions.  Ideally, we would have some prior knowledge of these parameters.
+
+$$
+\begin{equation}
+\tag{3}
+\left [ y_i \mid d(\theta_o, u_i), \sigma_o^2 \right ]
+\end{equation}
+$$
+
+$$
+\begin{equation}
+\tag{4}
+\left [ \theta_p \right ] \left [ \theta_o \right ] \left [ \sigma_p^2 \right ] \left [ \sigma_s^2 \right ] \left [ \sigma_o^2 \right ]
+\end{equation}
+$$
+
+### Full model
+
+Putting it all together, we can write down the posterior as:
+
+
+$$
+\begin{equation}
+\tag{5}
+\left [ {\underbrace { z, \theta_p, \theta_o, \sigma_p^2, \sigma_s^2, \sigma_o^2, u_i }_{\text{unobserved}}} \mid {\underbrace { y_i }_{\text{observed}}} \right ] \propto \left [ {\underbrace { y_i \mid d(\theta_o, u_i), \sigma_o^2}_{\text{observation model}}} \right ] \left [ {\underbrace { u_i \mid z, \sigma_s^2}_{\text{sampling model}}} \right ] \ast  \\ \left [ {\underbrace { z \mid g(\theta_p, \mathbf{x}), \sigma_p^2}_{\text{process model}}} \right ]  {\underbrace { \left [ \theta_p \right ] \left [ \theta_o \right ] \left [ \sigma_p^2 \right ] \left [ \sigma_s^2 \right ] \left [ \sigma_o^2 \right ] }_{\text{parameter models}}}
+\end{equation}
+$$
+
+
+## Example Wildebeast population as a function of rainfall
+
+The example is informative in that it is completely worked as they will want in the exersizes, so I am going to summarize.  First, what is the system and question:  wildebeest population in the grasslands of Tanzania and Kenya appear to be in a steady state caused by instraspecific competition for green plant biomass during the dry seeason which in turn is approximately proportional to the annually variable rainfall.  That's a lot to digest, however, the specific question helps narrow our focus: how does variation in weather modify feedbacks between population density and population growth rate in a population of wildebeest where precipitation is variable in time.  From above, the modeler needs to specify the parts to the model:
+
+$$prior \propto \text{observation model} \ast \text{sampling model} \ast \text{process model} \ast \text{parameters model}$$
+
+### Process model
+
+The question suggests we are looking to model the unobserved true number of wildebeest in year t.  Rather than use $z$, we will use $N_t$ as is customary for population counts.  We do have explanatory variables, namely annual rainfall in year t, denoted as $x_t$.  Hobbs and Hooten give the following for the process model:
+
+$$
+\begin{equation}
+\tag{6}
+N_t = g(\mathbf{\beta},N_{t-1},x_t,\Delta t) = N_{t-1}e^{(\beta_0 + \beta_1N_{t-1}+ \beta_2 x_t + \beta_3N_{t-1}x_t)\Delta t}
+\end{equation}
+$$
+
+Looking at the parts, with zero rainfall and wildebeest, $e^{\beta_0\Delta t}$ is the base change in abundance.  The authors spend time discussing what it means to have zero rainfall and redefine $x_t$ as the deviation from the long term average rainfall in year t.  With this reparameterization, $\beta_1$ is the change in growth rate for each additional animal.  The parameter $\beta_2$ gives the change in population growth rate due to a deviation from the long-term mean annual growth rate.  This leaves $\beta_3$ as the magnitude of rainfall on the population density.  Equation (6) is steeped in population dynamic theory and is certainly something that would require some thought.
+
+Estimating the $\beta$'s will definitely inform the question posed, however, a moments thought will lead one to a million parameters left out of the model: predation, paching and disease.  To add the effects of these unknown and unspecified variables in the model, we add a stochastic component and end at:
+
+$$
+\begin{equation}
+\tag{7}
+\left [ N_t \mid g(\underline{\smash{\beta}}, N_{t-1}, x_t, \Delta t), \sigma_p^2 \right ]
+\end{equation}
+$$
+
+### Sampling model
+
+The wildebeest population was estimated using spatially replicated counts of animals on georectified aerial photographs covering some known area.  A feature of the data is that the pictures did not cover the entire area.  The data is assumed to represent a statistically independent sample of the population density given as $\frac{N-t}{a}$ where $a$ is the total area inhabited by the animals.
+
+$$
+\begin{equation}
+\tag{8}
+\left [ y_{tj} \mid \frac{N_t}{a}, \sigma_s^2 \right ]
+\end{equation}
+$$
+Equation (7) gives us our observed density of animals at year $t$ on photograph $j$ across the entire habitat.  Things omitted: bias in estimating animal density on a given picture, uncertainty is the counting itself, rainfall is measured without error, etc which are all dealt with by including a stochastic component, $\sigma_s^2$.
+
+### Observation model
+
+In this case, we are considering our observation of animals to be perfect.  The authors do provide a hypothetical case for using some sort of telemetry as a proxy for counting.  They introduce the proxy as a probability for being counted, $\psi$.  Doing this gives the following:
+
+
+$$
+\begin{equation}
+\tag{9}
+ {\underbrace {\left [ y_i \mid \psi n_{tj}, \sigma_o^2 \right ]}_{\text{observation model}}}   {\underbrace { \left [ n_{tj} \mid \frac{N_t}{a}, \sigma_s^2 \right ]}_{\text{sampling model}}}
+\end{equation}
+$$
+The sampling model includes $n_{tj}$ as number of animals that are truly present in picture $j$ at time $t$ and the observation model deals with the under count through $\psi$ and associated uncertainty in estimating $\psi$ by inclusion of $\sigma_o^2$.
+
+### Full model
+
+Combining the sampling model (8) with the process model (7) with models for the parameters, we get to the full model.
+
+$$
+\begin{equation}
+\tag{9}
+\left [ {\underbrace {N_t,N_{t-1},\underline{\smash{\beta}},\sigma_p^2,\sigma_s^2  }_{\text{unobserved}}}  \mid {\underbrace { y_{tj}  }_{\text{observed}}} \right ] \propto
+ {\underbrace {\left [ y_{tj} \mid \frac{N_t}{a}, \sigma_s^2 \right ]}_{\text{sampling model}}}   {\underbrace {\left [ N_t \mid g(\underline{\smash{\beta}}, N_{t-1}, x_t, \Delta t), \sigma_p^2 \right ]}_{\text{process model}}} {\underbrace {\left [ \beta_0 \right ] \left [ \beta_1 \right ]\left [ \beta_2 \right ] \left [ \beta_3 \right ] \left [ \sigma_p^2 \right ] \left [ \sigma_s^2 \right ]}_{\text{parameter models}}} 
+\end{equation}
+$$
+I am relatively new to Bayesian networks drawn as acyclic graphs. I like the one they drew as it helps me focus on the different relationships of parameters and quantities observed/calculated.  Dashed arrows are stochastic, solid indicate deterministic relationships with quantities observed without error.
+
+
+```{r fig.height=4, fig.align = 'center', fig.cap="Bayesian network for Wildebeest example from Hobbs and Hooten."}
+include_graphics("./images/HH_fig1.2.1.png")
+```
+
+From this, we can see the data we need and the various parameters and where they are involved.  If we had included a sampling model, there would have been an additional layer to the figure with the associated parameters and dependencies drawn.
+
+
+
+
+
+
+

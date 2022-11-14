@@ -1,0 +1,92 @@
+---
+title: "Accept-Reject-digression-tldr"
+description: |
+  Accept-Reject intuitive description.
+draft: false
+categories: [MCMC, Accept-Reject]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-04
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+
+Suppose we have an area $\Omega'$ completely enclosed by another area $\Omega$ as seen below.  We know how to sample from the larger area $\Omega$ but we really want to sample from $\Omega'$.  
+
+```{r}
+plot(1, 1, col = "white", xlab = "X", ylab = "Y", xlim=c(0.5,2), ylim=c(0,1.1))  
+polygon(x = c(0.7, 1.7, 1.1, 0.8),
+        y = c(0.6, 1, 0.7, .1),
+        col = "#1b98e0") 
+```
+
+We can do this via the Accept-Reject algorithm as follows:
+
+Let  
+$g(x) = \frac{\mathbb{1}_\Omega (x)}{A(\Omega)}$ where we have an indicator for in/out of $\Omega$ and A is the area defined by $\Omega$.  
+
+Similarly, we define our target by:  
+$f(x) = \frac{\mathbb{1}_\Omega' (x)}{A(\Omega')}$
+
+The AR algorithm is then:
+
+1. draw $u\sim unif(0,1)$
+2. draw $x \sim g(\cdot)$
+3. accept if $u \le \frac{f(x)}{Mg(x)} = \frac{A(\Omega)}{A(\Omega')}\frac{\mathbb{1}_\Omega' (x)}{\mathbb{1}_\Omega (x)}\frac{1}{M}$.  We should pick $M=\frac{A(\Omega)}{A(\Omega')}$.
+
+
+## Example
+
+Darts to estimate $\pi$.
+
+Consider a circle circumscribed within the bounds of the square, both centered on (x,y)=(0,0).  Let the radius of the circle be 1 such that if we focus on the first quadrant, we are looking at a unit square.  Within this quadrant, we can form the ratio of the areas as:
+
+$$
+\begin{equation}
+\frac{\tfrac{1}{4}A_{circle}}{A_{square}} = \frac{\pi r^2}{4r^2} = \frac{\pi}{4}
+\end{equation}
+$$
+So, if we could measure the area of the circle vs square in this quadrant, we know the ratio will be $\frac{\pi}{4}$.  So, how can we determine the areas?  How about we sample from the unit square and perform accept-reject if the points samples fall within the circle?
+
+1. draw $u_1 \sim unif(0,1), u_2\sim unif(0,1)$  
+2. accept if $\sqrt{u_1^2 + u_2^2} \le 1$  
+3. $\pi = 4*\frac{accept}{draws}$
+
+```{r echo=TRUE, include=TRUE,fig.height=6, fig.width=6, fig.align = 'center'}
+set.seed(189437)
+N <- 1e6
+accept <- rep(0,N)
+u1_draw <- runif(N)
+u2_draw <- runif(N)
+for(i in 1:N){
+  if(sqrt(u1_draw[i]^2+u2_draw[i]^2)<1){
+    accept[i] <- 1
+  }
+}
+simpi <- 4*sum(accept)/N
+plot(u1_draw, u2_draw, col=accept+1,pch=20)
+text(0.4,0.4,paste0(N," draws to estimate pi to ",simpi))
+```
+
+

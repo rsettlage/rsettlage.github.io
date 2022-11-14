@@ -1,0 +1,154 @@
+---
+title: "tl;dr Detailed Balance"
+description: |
+  Detailed balance description and proof for Gibbs and Metropolis-Hastings .
+draft: false
+categories: [MCMC, Detailed Balance, Gibbs, Metropolis, Metropolis-Hastings]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-13
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+  \usepackage{mathtools}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+Short proof of detailed balance for Gibbs and Metropolis(-Hastings) Sampling.  The general idea is that you need to prove that the forward and backward transitions should be equal, ie there is no bias in transition movement.  
+
+This is summed up as follows:  
+
+Forward transition probability: $P(x'\mid x)$  
+Reverse transition probability: $P(x\mid x')$  
+
+Our claim is if:  
+
+$$
+\begin{eqnarray}
+\tag{1}
+\Pi_i(x')\;P_{ij}(x'\mid x) &=& \Pi_j \; P_{ji}(x)(x \mid x') \text{ then} \\
+\vec{\Pi} &=& \{{\Pi_1, \Pi_2, \dots \Pi_N}\} \text{ is stationary}
+\end{eqnarray}
+$$
+
+## Gibbs
+
+### Algorithm
+
+$$
+\begin{eqnarray}
+Step 1:  \\
+\tag{1}
+y' &\sim & f(y\mid x) \\
+Step 2:  \\
+\tag{2}
+x' &\sim & f(x\mid y')
+\end{eqnarray}
+$$
+
+### Proof
+
+Want to prove:
+
+$$
+\tag{3}
+forward\; transition = backward\; transition
+$$
+
+
+$$
+\begin{eqnarray}
+\tag{4}
+{\overbrace {\textstyle f(x\mid y)\;p([x',y']\mid [x,y])}^{ {forward\; direction}}}  &=& f(x,y)\;{\overbrace {f(y'\mid x)}^{ {step 1}}}\; {\overbrace {\textstyle f(x'\mid y')}^{ {step 2}}}\\
+  &=& f(x,y)\; \frac{f(y',x)}{f(x)}\frac{f(x',y')}{f(y')} \text{ Bayes Rule} \\
+  &=& \frac{f(x,y)}{f(x)}\; \frac{f(y',x)}{f(y')}f(x',y') \\
+  &=& {\underbrace {\textstyle f(y\mid x)}_{ {step 2}}}\; {\underbrace {\textstyle f(x\mid y')}_{ {step 1}}}\;f(x',y') \text{ Bayes Rule}\\
+  &=& p([x,y]\mid [x',y'])\;f(x',y') \\
+  &=& {\underbrace {\textstyle p([x,y]\mid [x',y'])\;f(x'\mid y')}_{ {backward\; direction}}}
+\end{eqnarray}
+$$
+
+
+## Metropolis(-Hastings)
+
+Metropolis and Metropolis-Hastings differ in the transition rule.  The Metropolis-Hastings correction to the Metropolis sampler adds a correction to account for situations where the sampling distribution is not symetric.  Adding the correction term to the below does not change the argument.
+
+### Algorithm
+
+Metropolis:
+
+0) init $x^{(t=0)}$  
+   for t in 1:T  
+     1) propose $x^{\ast} \sim g(x^t \mid x^{t-1})$
+     2) $\alpha = min(1, \frac{\Pi(x^{\ast})}{\Pi(x^{(t-1)})})$
+     3) $x^t = \begin{cases} x^{\ast} \text{ w.p. } \alpha \\ x^{(t-1)} \;\;\; 1-\alpha \end{cases}$  
+     
+     
+### Proof
+
+Need to show
+
+$$
+\begin{equation}
+\tag{5}
+P_{ij}\Pi_i = P_{ji}\Pi_j
+\end{equation}
+$$
+
+WLOG: assume $\Pi_(x') \le \Pi_(x)$ for calulating $\alpha$
+
+#### Forward
+
+$$
+\begin{eqnarray}
+\tag{6}
+P_{ij}(x' \mid x) &=& {\overbrace {g(x'\mid x)}^{ {step 1}}}\;\; {\overbrace {\alpha}^{ {step 2}}} \\
+  &=& g(x'\mid x) \cdot min\left(1,\frac{\Pi(x')}{\Pi(x)}\right) \\
+  &=& g(x'\mid x) \cdot \frac{\Pi(x')}{\Pi(x)} 
+\end{eqnarray}
+$$
+
+
+#### Reverse
+
+$$
+\begin{eqnarray}
+\tag{7}
+P_{ji}(x \mid x') &=& {\overbrace {g(x\mid x')}^{ {step 1}}}\;\; {\overbrace {\alpha}^{ {step 2}}} \\
+  &=& g(x\mid x') \cdot min\left(1,\frac{\Pi(x)}{\Pi(x')}\right) \\
+  &=& g(x'\mid x) \cdot 1 \\
+  &=& g(x'\mid x)
+\end{eqnarray}
+$$
+
+
+#### Detailed Balance
+
+
+$$
+\begin{eqnarray}
+\tag{8}
+P_{ij} \Pi_i &=& P_{ji}\Pi_j \\
+g(x'\mid x) \frac{\Pi (x')}{\Pi (x)}\Pi (x) &=& g(x\mid x') \Pi(x') \\
+g(x'\mid x) \Pi(x) &=& g(x\mid x') \Pi(x')
+\end{eqnarray}
+$$
+

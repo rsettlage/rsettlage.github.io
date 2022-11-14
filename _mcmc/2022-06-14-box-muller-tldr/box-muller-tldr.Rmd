@@ -1,0 +1,248 @@
+---
+title: "Box-Muller-tldr"
+description: |
+  A short introction to Box-Muller to generate two independent random normals.
+draft: false
+categories: [MCMC, Box-Muller]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-06-17
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+
+## Goal: generate 2 independent N(0,1) variables
+
++ Step 1 : generate data from 2 independent random uniform variables
+
+$$
+\begin{eqnarray}
+u_1 \sim unif(0,1) \\
+u_2 \sim unif(0,1)
+\end{eqnarray}
+$$
+
++ Step 2: 
+
+define:
+
+$$
+\begin{eqnarray} \\
+\tag{1}
+\Theta &=& 2\pi u_2 \\
+\tag{2}
+R &=& \sqrt{-2log(u_1)}
+\end{eqnarray}
+$$
+
+
+compute:
+
+$$
+\begin{equation}
+\tag{3}
+g(u_1,u_2) = \begin{cases}
+x_1 &=& R cos \Theta \\
+x_2 &=& R sin \Theta
+\end{cases}
+\end{equation}
+$$
+
+
+
+
+
+claim:
+
+$$
+\begin{eqnarray}
+X_1 \perp \!\!\! \perp X_2
+\end{eqnarray}
+$$
+
+## Proof
+
+We just need to transform and find pdf of $X_1$ and $X_2$.
+
+$$
+\begin{eqnarray}
+\tag{4}
+P_{X_1,X_2}(x_1,x_2) &=& P_{u_1,u_2}g^{-1}(u1,u2)\cdot \mid J \mid \\
+\tag{5}
+J &=& \begin{vmatrix} 
+   \tfrac{\partial u_1}{\partial x_1} & \tfrac{\partial u_1}{\partial x_2}  \\
+   \tfrac{\partial u_2}{\partial x_1} & \tfrac{\partial u_2}{\partial x_2}  \\
+   \end{vmatrix}
+\end{eqnarray}
+$$
+
+noting that $P_{u_1,u_2}g^{-1}(u1,u2) = P_{u_1}(u_1) P_{u_2}(u_2) = 1\cdot 1 = 1$.
+
+Now, 
+
+$$
+\begin{eqnarray}
+x_1^2 + x_2^2 &=& R^2 \\
+  &=& -2\cdot log (u_1) \\
+  \tag{6}
+  \Rightarrow u_1 &=& e^{-\tfrac{1}{2}(x_1^2+x_2^2)}
+\end{eqnarray}
+$$
+
+And
+
+$$
+\begin{eqnarray}
+\frac{x_1}{x_2} &=& \frac{cos \Theta}{sin \Theta} \\
+  &=& tan \Theta \\
+  &=& tan (2 \pi u_2) \\
+  \tag{7}
+  \Rightarrow u_2 &=&\frac{1}{2\pi}tan^{-1}(\frac{x_2}{x_1}) 
+\end{eqnarray}
+$$
+Taken together:
+$$
+\begin{equation}
+\tag{8}
+g^{-1}(u_1,u_2) = \begin{cases}
+u_1 &=& e^{-\tfrac{1}{2}(x_1^2+x_2^2)} \\
+u_2 &=&\frac{1}{2\pi}tan^{-1}(\frac{x_2}{x_1})
+\end{cases}
+\end{equation}
+$$
+
+Now to compute the Jacobian using the definitions of $u_1$ and $u_2$ just given:
+
+$$
+\begin{eqnarray}
+P_{X_1,X_2}(x_1,x_2) &=& P_{u_1,u_2}g^{-1}(u1,u2)\cdot \mid J \mid \\
+J &=& \begin{vmatrix} 
+   \tfrac{\partial u_1}{\partial x_1} & \tfrac{\partial u_1}{\partial x_2}  \\
+   \tfrac{\partial u_2}{\partial x_1} & \tfrac{\partial u_2}{\partial x_2}  \\
+   \end{vmatrix} \\
+   &=& \begin{vmatrix} 
+   -x_1 e^{-\tfrac{1}{2}(x_1^2+x_2^2)} & -\frac{1}{2\pi}\frac{x_2^2}{x_1^2+x_2^2}  \\
+   -x_2 e^{-\tfrac{1}{2}(x_1^2+x_2^2)} & -\frac{1}{2\pi}\frac{x_1^2}{x_1^2+x_2^2}  \\
+   \end{vmatrix} \\
+   &=& \frac{1}{2\pi}e^{-\tfrac{1}{2}(x_1^2+x_2^2)} \\
+   \tag{9}
+   &=&{\underbrace {\frac{1}{\sqrt{2\pi}}e^{-\tfrac{1}{2}x_1^2}}_{ {N(0,1)}}} \cdot {\underbrace {\frac{1}{\sqrt{2\pi}}e^{-\tfrac{1}{2}x_2^2}}_{ {N(0,1)}}}
+\end{eqnarray}
+$$
+Finally, we can now use Box-Muller.  
+
+## Example 1
+
+Let's do it:
+
+```{r echo=TRUE, include=TRUE}
+# draw u1 and u2 as unifs
+  draws <- 10000
+# draw u1,u2
+  set.seed(194756)
+  u1 <- runif(draws)
+  set.seed(194396)
+  u2 <- runif(draws)
+# compute R and Theta
+  Theta <- 2*pi*u2
+  R <- sqrt(-2*log(1-u1))
+# finally, X1 and X2 as N(0,1)
+  x1 <- R*cos(Theta)
+  x2 <- R*sin(Theta)
+
+
+# probably need 2 plots, u's,x's
+df_u <- data.frame(cbind(u1,u2))
+
+
+us_density <- ggplot(df_u, aes(x=u1, y=u2)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white") +
+  geom_point(colour = "pink", size=0.1) +
+  coord_fixed() +
+  ggtitle("Contours of u1 vs u2")
+
+df_x <- data.frame(cbind(x1,x2))
+xs_density <- ggplot(df_x, aes(x=x1, y=x2)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white") +
+  geom_point(colour = "pink", size=0.1,alpha=0.4) +
+  coord_fixed() +
+  ggtitle("Contours of x1 vs x2")
+
+df_x <- data.frame(xs=c(x1,x2),xlabs=rep(c("x1","x2"),each=draws))
+xs_hist <- ggplot(df_x, aes(x=xs, color=xlabs, fill=xlabs)) +
+  geom_histogram(aes(y=..density..), bins = 60, position="identity", alpha=0.3) +
+  theme_bw()
+
+us_density
+xs_density
+xs_hist
+```
+
+
+## Example 2
+
+What if we wanted y to be somewhere else, have a different spread OR have some correlation?  Transform the X's...i.e. we can (now) get $$X_1 \sim N(0,1)\perp \!\!\! \perp X_2 \sim N(0,1)$$, but we want:
+
+$$
+\begin{eqnarray}
+\underline{y} &\sim& N(\underline{\mu}_{(2,1)},\mathbf{\Sigma}_{(2,2)})\text{ dimensions given as subscript} \\
+\tag{10}
+\underline{y} &=& \mathbf{X}\mathbf{\Sigma}^{-\tfrac{1}{2}}+\underline{\mu}
+\end{eqnarray}
+$$
+
+Suppose for instance, we want $y_1\sim N(3,0.1), y_2\sim N(1,2)$ where cov($y_1,y_2$)=-0.4.
+
+Define $\underline{\mu}=(3,1)$ and $\Sigma=\begin{vmatrix} 
+   0.1 & -0.4  \\
+   -0.4 & 2  \\
+   \end{vmatrix}$
+   
+Looking at the code and plot below, it appears as though our location, spread and covariance all visible match what we want.  Without showing the numbers, the stats match as well.
+   
+```{r}
+   
+## define desired locations, spread and covariance
+x1_mean <- 3
+x1_var <- 0.1
+x2_mean <- 1
+x2_var <- 2
+xy_cov <- -0.4
+
+# now create correlated y
+S2 <- array(c(x1_var,xy_cov,xy_cov,x2_var),dim=c(2,2))
+S <- chol(S2)
+mu <- rep(c(x1_mean,x2_mean),each=draws)
+X <- cbind(x1,x2)
+Y <- X%*%S + mu
+
+Y_df <- as.data.frame(Y)
+colnames(Y_df) <- c("y1","y2")
+Y_density <- ggplot(Y_df, aes(x=y1, y=y2)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white") +
+  geom_point(colour = "pink", size=0.05,alpha=0.4) +
+  ggtitle("Contours of y1 vs y2") +
+  theme_bw()
+
+Y_density
+```

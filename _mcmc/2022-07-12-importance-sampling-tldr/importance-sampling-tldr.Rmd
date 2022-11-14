@@ -1,0 +1,158 @@
+---
+title: "Importance-sampling-tldr"
+description: |
+  A short introction to Importance Sampling.
+draft: false
+categories: [MCMC, Importance Sampling]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-07-12
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
+library(knitr)
+library(kableExtra)
+library(ggpubr)
+library(ggplot2)
+library(ggExtra)
+```
+
+This one is a little (lot?) long.  I hope I can condense it to a card.
+
+First, recall we might want to solve:
+
+$$
+\begin{equation}
+\tag{1}
+E_f[h(x)] = \int_x h(x) f(x) dx \approx \frac{1}{N} \sum_{x_i \sim f} h(x)
+\end{equation}
+$$
+
+This works if $\int f(x) dx = 1$, ie $f(x)$ is a proper distribution.  If not, we can do:
+
+$$
+\begin{equation}
+\tag{2}
+E_f[h(x)] = \int_x h(x) \frac{c f(x)}{c} dx \approx \frac{c}{N} \sum_{x_i \sim f/c} h(x)
+\end{equation}
+$$
+
+where $\int f(x) dx = c \lt \infty$.  So, what if we have a proposal function $g(x)$ such that $\Omega_f \le \Omega_g$. Well, 
+
+$$
+\begin{equation}
+\tag{3}
+E_f[h(x)] = \int_x h(x) f(x) dx = \int_x h(x) \frac{f(x) g(x)}{g(x)} dx \approx \frac{1}{N} \sum_{x_i \sim g} h(x) \frac{f(x)}{g(x)}
+\end{equation}
+$$
+
+### Question 1:  What does (3) converge to?
+
++ If it converges, it converges to $E_f[h(x)]$.  
+
+### Question 2a:  Which g() should we pick?
+
++ the one that minimizes the variance
+
+$$
+\begin{eqnarray}
+\tag{4}
+min\ E_g\left [ \left( h(x) \frac{f(x)}{g(x)}\right)^2\right] &=& \int_x h^2(x)\frac{f^2(x)}{g^2(x)}g(x) dx \\
+  &=& \int_x h^2(x)\frac{f(x)}{g(x)} f(x) dx \\
+  &=& E_f\left [ h^2(x) \frac{f(x)}{g(x)}\right]
+\end{eqnarray}
+$$
+
+Note, if the importance rate, $$ \frac{f(x)}{g(x)} \le M \lt \infty $$, then
+
+$$
+\begin{equation}
+\tag{5}
+E_f\left [ h^2(x) \frac{f(x)}{g(x)}\right] \le M\ast E[h^2(x)] \lt \infty 
+\end{equation}
+$$
+defines **tail dominance**.
+
+### Question 2b: is there an optimal g()?  YES
+
+#### Theorem
+
+This is optimal:  
+
+$$
+\begin{equation}
+\tag{6}
+g(x) = g^{\ast}(x) = \frac{\mid h(x) \mid f(x)}{\int \mid h(x) \mid f(x) dx}
+\end{equation}
+$$
+
+#### Proof
+
+
+$$
+\begin{equation}
+\tag{7}
+Var_g\left(h(x)\frac{f(x)}{g(x)}\right) = E_g \left[ \left( h(x) \frac{f(x)}{g(x)}\right)^2 \right] - E_g\left [ h(x) \frac{f(x)}{g(x)}\right]^2
+\end{equation}
+$$
+
+
+Remembering Jensen's Inequality:
+
+$$
+\begin{eqnarray}
+E_g\left [ h^2(x) \frac{f^2(x)}{g^2(x)}\right] &\ge & E_g\left [ \mid h(x)\mid \frac{f(x)}{g(x)}\right]^2 \\
+  &\ge & \left( \int_g \mid h(x)\mid \frac{f(x)}{g(x)} g(x) dx\right)^2 \\
+  \tag{8}
+  &\ge & \left( \int_g \mid h(x)\mid f(x) dx\right)^2
+\end{eqnarray}
+$$
+IS the lower bound.
+
+Can we reach the lower bound??  Plug (6) into $$E_g \left[ \left( h(x) \frac{f(x)}{g(x)}\right)^2 \right]$$
+
+YES, and optimal!!
+
+#### NOTE the concept of effective sample size
+
+To use (6), we need to evaluate the integral in the denominator.  BUT, that is as hard as the original problem.  However, recall:
+
+$$
+\begin{equation}
+\tag{9}
+E_f[h(x)] = \int h(x) f(x) dx \approx \sum_g h(x)\frac{f(x)}{g(x)} \equiv \sum_g h(x) \omega (x)
+\end{equation}
+$$
+
+which is just a weighted average.  Remembering $E_g[w(x)]=1$, we could also use:
+
+$$
+\begin{equation}
+\tag{10}
+E_f[h(x)] = \approx \frac{\sum_g h(x)\omega (x)}{\sum_g \omega (x)} 
+\end{equation}
+$$
+
+Finally, don't forget the effective sample size (ESS):
+
+$$
+\begin{equation}
+\tag{11}
+ESS = \frac{N}{1+Var_g(\omega (x))} 
+\end{equation}
+$$
+
+
