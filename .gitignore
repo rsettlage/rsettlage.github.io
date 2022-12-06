@@ -1,3 +1,7 @@
+_teaching/*/*
+_mcmc/*/*
+_deeplearning/*/*
+_books/*/*
 .Rproj.user*
 .Rhistory
 .RData
