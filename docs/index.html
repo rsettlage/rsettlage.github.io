@@ -51,16 +51,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -74,9 +75,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -790,6 +791,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1031,10 +1033,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
-  }
-
-  .figure img {
-    width: 100%;
   }
 
   .figure .caption {
@@ -1866,9 +1864,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -1880,6 +1890,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1979,6 +2014,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2001,7 +2038,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2134,7 +2171,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   html {
     /*-- Main font sizes --*/
-    --title-size:      50px;
+    --title-size:      45px;
     --body-size:       1.06rem;
     --code-size:       14px;
     --aside-size:      12px;
@@ -2178,9 +2215,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   /* These properties only apply to Distill sites and blogs  */
 
   .distill-site-header {
-    --title-size:       18px;
+    --title-size:       30px;
     --text-color:       #1f1f1f;                   /* edited */
-    --text-size:        15px;
+    --text-size:        16px;
     --hover-color:      #787878;                   /* edited */
     --bkgd-color:       #fff;                      /* edited */
   }
@@ -2192,7 +2229,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     --bkgd-color:       #e3e3e3;
     border-top: 3px solid #AD0059;
     text-align: left;
-    padding-top: 0px;
+    padding-top: 3px;
     padding-bottom: 0px;
   }
 
@@ -2395,7 +2432,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.12/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2652,40 +2689,24 @@ function init_posts_list() {
 <h1>Robert E. Settlage</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>Welcome!! WIP, for sure, have requests? Submit as an issue
-…</p></p>
+<p><p>Welcome!! WIP, for sure, have requests? Submit as an issue …</p></p>
 </div>
 
 
 <div class="d-article">
 <h2 id="me">Me</h2>
-<p>While I am a leader in many aspects, I am also a chemist,
-statistician, and compute junkie all rolled up into one. I am the
-bioinformatician doing the COVID surveillance sequencing analysis for
-SW-VA. I am the NVidia Deep Learning Institute Ambassador to Virginia
-Tech. I love data, bigger is better. Something big enough to challenge
-the available compute. I love automation. Do it the first time, it is
-research, do it a second time, it is productionizing (bug fixing ;) ), a
-third time is now monotonous and should be automated.</p>
-<p>This site is dedicated to my data science geek. I am writing this for
-me, but hope you will get something from them. What am I hoping to get
-from this is both clarity as I write and explain for me and a record of
-my journey. I may also include some of my automation projects. What do I
-mean by automation, here is a snapshot of my GitHub personal view. Note
-that most of the commits are coming from automated usage stat collection
-on a set of HPC clusters every 10 min, 365.</p>
+<p>I am a chemist, statistician, and compute junkie all rolled up into one. I am the bioinformatician doing the COVID surveillance sequencing analysis for SW-VA. I am the NVidia Deep Learning Institute Ambassador to Virginia Tech. I love data, bigger is better. Something big enough to challenge the available compute.</p>
+<p>I love automation. Do it the first time, it is research, do it a second time, it is productionizing (bug fixing ;) ), a third time is now monotonous and should be automated. What do I mean by automation, as an example, I have scripts to collect usage stats on a set of HPC clusters every 10 min, 365. These aren’t just for fun, they collect and display cluster status for informing where to submit jobs based on queue congestion.</p>
+<p>I also love AI/ML/DL. To me, teaching the computer to learn from data in a semi automated fashion is the ultimate end goal. This site is a record of my data science and [AMD]L journey. I hope to touch on everything from clustering and classification to productionizing and MLOps.</p>
+<p>Finally, I a big fan of MCMC methods and will try to create concise summaries of popular algorithms along with some examples of thier use.</p>
 <h2 id="todo">TODO</h2>
 <ul>
-<li>add GitHub calendar probably following some permutation of this: “<a
-href="https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl"
-class="uri">https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl</a>”
-and this “<a href="https://github.com/lepture/github-cards"
-class="uri">https://github.com/lepture/github-cards</a>” or this “<a
-href="https://ghchart.rshah.org"
-class="uri">https://ghchart.rshah.org</a>”</li>
+<li>add GitHub calendar
+probably following some permutation of this: “<a href="https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl" class="uri">https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl</a>” and this
+“<a href="https://github.com/lepture/github-cards" class="uri">https://github.com/lepture/github-cards</a>” or this
+“<a href="https://ghchart.rshah.org" class="uri">https://ghchart.rshah.org</a>”</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

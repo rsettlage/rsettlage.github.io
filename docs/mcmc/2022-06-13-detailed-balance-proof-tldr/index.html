@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -807,6 +808,7 @@ d-title .dt-tags {
 d-article table.gt_table td,
 d-article table.gt_table th {
   border-bottom: none;
+  font-size: 100%;
 }
 
 .html-widget {
@@ -1048,10 +1050,6 @@ figure img.external {
   position: relative;
   margin-bottom: 2.5em;
   margin-top: 1.5em;
-}
-
-.figure img {
-  width: 100%;
 }
 
 .figure .caption {
@@ -1883,9 +1881,21 @@ function init_distill() {
 
     // hoverable references
     $('span.citation[data-cites]').each(function() {
+      const citeChild = $(this).children()[0]
+      // Do not process if @xyz has been used without escaping and without bibliography activated
+      // https://github.com/rstudio/distill/issues/466
+      if (citeChild === undefined) return true
+
+      if (citeChild.nodeName == "D-FOOTNOTE") {
+        var fn = citeChild
+        $(this).html(fn.shadowRoot.querySelector("sup"))
+        $(this).id = fn.id
+        fn.remove()
+      }
       var refs = $(this).attr('data-cites').split(" ");
       var refHtml = refs.map(function(ref) {
-        return "<p>" + $('#ref-' + ref).html() + "</p>";
+        // Could use CSS.escape too here, we insure backward compatibility in navigator
+        return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
       }).join("\n");
       window.tippy(this, {
         allowHTML: true,
@@ -1897,6 +1907,31 @@ function init_distill() {
         placement: 'bottom-start'
       });
     });
+
+    // fix footnotes in tables (#411)
+    // replacing broken distill.pub feature
+    $('table d-footnote').each(function() {
+      // we replace internal showAtNode methode which is triggered when hovering a footnote
+      this.hoverBox.showAtNode = function(node) {
+        // ported from https://github.com/distillpub/template/pull/105/files
+        calcOffset = function(elem) {
+            let x = elem.offsetLeft;
+            let y = elem.offsetTop;
+            // Traverse upwards until an `absolute` element is found or `elem`
+            // becomes null.
+            while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                x += elem.offsetLeft;
+                y += elem.offsetTop;
+            }
+
+            return { left: x, top: y };
+        }
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+        const bbox = node.getBoundingClientRect();
+        const offset = calcOffset(node);
+        this.show([offset.left + bbox.width, offset.top + bbox.height]);
+      }
+    })
 
     // clear polling timer
     clearInterval(tid);
@@ -1996,6 +2031,8 @@ function init_common() {
   // mark non-body figures created by knitr chunks as 100% width
   $('.layout-chunk').each(function(i, val) {
     var figures = $(this).find('img, .html-widget');
+    // ignore leaflet img layers (#106)
+    figures = figures.filter(':not(img[class*="leaflet"])')
     if ($(this).attr('data-layout') !== "l-body") {
       figures.css('width', '100%');
     } else {
@@ -2018,7 +2055,7 @@ function init_common() {
   // get rid of index.html references in header
   if (window.location.protocol !== "file:") {
     $('.distill-site-header a[href]').each(function(i,val) {
-      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
     });
   }
 
@@ -2412,7 +2449,7 @@ d-appendix d-footnote-list a.footnote-backlink {
   color: var(--hover-color, white);
 }</style>
 <!--/radix_placeholder_distill-->
-  <script src="../../site_libs/header-attrs-2.12/header-attrs.js"></script>
+  <script src="../../site_libs/header-attrs-2.16/header-attrs.js"></script>
   <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -2494,8 +2531,7 @@ d-appendix d-footnote-list a.footnote-backlink {
   <a href="../../mcmc.html#category:Metropolis-Hastings" class="dt-tag">Metropolis-Hastings</a>
 </div>
 <!--/radix_placeholder_categories-->
-<p><p>Detailed balance description and proof for Gibbs and
-Metropolis-Hastings .</p></p>
+<p><p>Detailed balance description and proof for Gibbs and Metropolis-Hastings .</p></p>
 </div>
 
 <div class="d-byline">
@@ -2509,36 +2545,29 @@ Metropolis-Hastings .</p></p>
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#gibbs">Gibbs</a>
+<li><a href="#gibbs" id="toc-gibbs">Gibbs</a>
 <ul>
-<li><a href="#algorithm">Algorithm</a></li>
-<li><a href="#proof">Proof</a></li>
+<li><a href="#algorithm" id="toc-algorithm">Algorithm</a></li>
+<li><a href="#proof" id="toc-proof">Proof</a></li>
 </ul></li>
-<li><a href="#metropolis-hastings">Metropolis(-Hastings)</a>
+<li><a href="#metropolis-hastings" id="toc-metropolis-hastings">Metropolis(-Hastings)</a>
 <ul>
-<li><a href="#algorithm-1">Algorithm</a></li>
-<li><a href="#proof-1">Proof</a></li>
+<li><a href="#algorithm-1" id="toc-algorithm-1">Algorithm</a></li>
+<li><a href="#proof-1" id="toc-proof-1">Proof</a></li>
 </ul></li>
 </ul>
 </nav>
 </div>
-<p>Short proof of detailed balance for Gibbs and Metropolis(-Hastings)
-Sampling. The general idea is that you need to prove that the forward
-and backward transitions should be equal, ie there is no bias in
-transition movement.</p>
+<p>Short proof of detailed balance for Gibbs and Metropolis(-Hastings) Sampling. The general idea is that you need to prove that the forward and backward transitions should be equal, ie there is no bias in transition movement.</p>
 <p>This is summed up as follows:</p>
-<p>Forward transition probability: <span
-class="math inline">\(P(x&#39;\mid x)\)</span><br />
-Reverse transition probability: <span class="math inline">\(P(x\mid
-x&#39;)\)</span></p>
+<p>Forward transition probability: <span class="math inline">\(P(x&#39;\mid x)\)</span><br />
+Reverse transition probability: <span class="math inline">\(P(x\mid x&#39;)\)</span></p>
 <p>Our claim is if:</p>
 <p><span class="math display">\[
 \begin{eqnarray}
 \tag{1}
-\Pi_i(x&#39;)\;P_{ij}(x&#39;\mid x) &amp;=&amp; \Pi_j \; P_{ji}(x)(x
-\mid x&#39;) \text{ then} \\
-\vec{\Pi} &amp;=&amp; \{{\Pi_1, \Pi_2, \dots \Pi_N}\} \text{ is
-stationary}
+\Pi_i(x&#39;)\;P_{ij}(x&#39;\mid x) &amp;=&amp; \Pi_j \; P_{ji}(x)(x \mid x&#39;) \text{ then} \\
+\vec{\Pi} &amp;=&amp; \{{\Pi_1, \Pi_2, \dots \Pi_N}\} \text{ is stationary}
 \end{eqnarray}
 \]</span></p>
 <h2 id="gibbs">Gibbs</h2>
@@ -2562,73 +2591,51 @@ forward\; transition = backward\; transition
 <p><span class="math display">\[
 \begin{eqnarray}
 \tag{4}
-{\overbrace {\textstyle f(x\mid y)\;p([x&#39;,y&#39;]\mid [x,y])}^{
-{forward\; direction}}}  &amp;=&amp; f(x,y)\;{\overbrace {f(y&#39;\mid
-x)}^{ {step 1}}}\; {\overbrace {\textstyle f(x&#39;\mid y&#39;)}^{ {step
-2}}}\\
-  &amp;=&amp; f(x,y)\;
-\frac{f(y&#39;,x)}{f(x)}\frac{f(x&#39;,y&#39;)}{f(y&#39;)} \text{ Bayes
-Rule} \\
-  &amp;=&amp; \frac{f(x,y)}{f(x)}\;
-\frac{f(y&#39;,x)}{f(y&#39;)}f(x&#39;,y&#39;) \\
-  &amp;=&amp; {\underbrace {\textstyle f(y\mid x)}_{ {step 2}}}\;
-{\underbrace {\textstyle f(x\mid y&#39;)}_{ {step 1}}}\;f(x&#39;,y&#39;)
-\text{ Bayes Rule}\\
+{\overbrace {\textstyle f(x\mid y)\;p([x&#39;,y&#39;]\mid [x,y])}^{ {forward\; direction}}}  &amp;=&amp; f(x,y)\;{\overbrace {f(y&#39;\mid x)}^{ {step 1}}}\; {\overbrace {\textstyle f(x&#39;\mid y&#39;)}^{ {step 2}}}\\
+  &amp;=&amp; f(x,y)\; \frac{f(y&#39;,x)}{f(x)}\frac{f(x&#39;,y&#39;)}{f(y&#39;)} \text{ Bayes Rule} \\
+  &amp;=&amp; \frac{f(x,y)}{f(x)}\; \frac{f(y&#39;,x)}{f(y&#39;)}f(x&#39;,y&#39;) \\
+  &amp;=&amp; {\underbrace {\textstyle f(y\mid x)}_{ {step 2}}}\; {\underbrace {\textstyle f(x\mid y&#39;)}_{ {step 1}}}\;f(x&#39;,y&#39;) \text{ Bayes Rule}\\
   &amp;=&amp; p([x,y]\mid [x&#39;,y&#39;])\;f(x&#39;,y&#39;) \\
-  &amp;=&amp; {\underbrace {\textstyle p([x,y]\mid
-[x&#39;,y&#39;])\;f(x&#39;\mid y&#39;)}_{ {bacward\; direction}}}
+  &amp;=&amp; {\underbrace {\textstyle p([x,y]\mid [x&#39;,y&#39;])\;f(x&#39;\mid y&#39;)}_{ {backward\; direction}}}
 \end{eqnarray}
 \]</span></p>
 <h2 id="metropolis-hastings">Metropolis(-Hastings)</h2>
-<p>Metropolis and Metropolis-Hastings differ in the transition rule. The
-Metropolis-Hastings correction to the Metropolis sampler adds a
-correction to account for situations where the sampling distribution is
-not symetric. Adding the correction term to the below does not change
-the argument.</p>
+<p>Metropolis and Metropolis-Hastings differ in the transition rule. The Metropolis-Hastings correction to the Metropolis sampler adds a correction to account for situations where the sampling distribution is not symetric. Adding the correction term to the below does not change the argument.</p>
 <h3 id="algorithm-1">Algorithm</h3>
 <p>Metropolis:</p>
 <ol start="0" type="1">
 <li>init <span class="math inline">\(x^{(t=0)}\)</span><br />
 for t in 1:T
 <ol type="1">
-<li>propose <span class="math inline">\(x^{\ast} \sim g(x^t \mid
-x^{t-1})\)</span></li>
-<li><span class="math inline">\(\alpha = min(1,
-\frac{\Pi(x^{\ast})}{\Pi(x^{(t-1)})})\)</span></li>
-<li><span class="math inline">\(x^t = \begin{cases} x^{\ast} \text{ w.p.
-} \alpha \\ x^{(t-1)} \;\;\; 1-\alpha \end{cases}\)</span></li>
+<li>propose <span class="math inline">\(x^{\ast} \sim g(x^t \mid x^{t-1})\)</span></li>
+<li><span class="math inline">\(\alpha = min(1, \frac{\Pi(x^{\ast})}{\Pi(x^{(t-1)})})\)</span></li>
+<li><span class="math inline">\(x^t = \begin{cases} x^{\ast} \text{ w.p. } \alpha \\ x^{(t-1)} \;\;\; 1-\alpha \end{cases}\)</span></li>
 </ol></li>
 </ol>
 <h3 id="proof-1">Proof</h3>
 <p>Need to show</p>
 <p><span class="math display">\[
 \begin{equation}
-\tag{3}
+\tag{5}
 P_{ij}\Pi_i = P_{ji}\Pi_j
 \end{equation}
 \]</span></p>
-<p>WLOG: assume <span class="math inline">\(\Pi_(x&#39;) \le
-\Pi_(x)\)</span> for calulating <span
-class="math inline">\(\alpha\)</span></p>
+<p>WLOG: assume <span class="math inline">\(\Pi_(x&#39;) \le \Pi_(x)\)</span> for calulating <span class="math inline">\(\alpha\)</span></p>
 <h4 id="forward">Forward</h4>
 <p><span class="math display">\[
 \begin{eqnarray}
-\tag{4}
-P_{ij}(x&#39; \mid x) &amp;=&amp; {\overbrace {g(x&#39;\mid x)}^{ {step
-1}}}\;\; {\overbrace {\alpha}^{ {step 2}}} \\
-  &amp;=&amp; g(x&#39;\mid x) \cdot
-min\left(1,\frac{\Pi(x&#39;)}{\Pi(x)}\right) \\
+\tag{6}
+P_{ij}(x&#39; \mid x) &amp;=&amp; {\overbrace {g(x&#39;\mid x)}^{ {step 1}}}\;\; {\overbrace {\alpha}^{ {step 2}}} \\
+  &amp;=&amp; g(x&#39;\mid x) \cdot min\left(1,\frac{\Pi(x&#39;)}{\Pi(x)}\right) \\
   &amp;=&amp; g(x&#39;\mid x) \cdot \frac{\Pi(x&#39;)}{\Pi(x)}
 \end{eqnarray}
 \]</span></p>
 <h4 id="reverse">Reverse</h4>
 <p><span class="math display">\[
 \begin{eqnarray}
-\tag{5}
-P_{ji}(x \mid x&#39;) &amp;=&amp; {\overbrace {g(x\mid x&#39;)}^{ {step
-1}}}\;\; {\overbrace {\alpha}^{ {step 2}}} \\
-  &amp;=&amp; g(x\mid x&#39;) \cdot
-min\left(1,\frac{\Pi(x)}{\Pi(x&#39;)}\right) \\
+\tag{7}
+P_{ji}(x \mid x&#39;) &amp;=&amp; {\overbrace {g(x\mid x&#39;)}^{ {step 1}}}\;\; {\overbrace {\alpha}^{ {step 2}}} \\
+  &amp;=&amp; g(x\mid x&#39;) \cdot min\left(1,\frac{\Pi(x)}{\Pi(x&#39;)}\right) \\
   &amp;=&amp; g(x&#39;\mid x) \cdot 1 \\
   &amp;=&amp; g(x&#39;\mid x)
 \end{eqnarray}
@@ -2636,15 +2643,13 @@ min\left(1,\frac{\Pi(x)}{\Pi(x&#39;)}\right) \\
 <h4 id="detailed-balance">Detailed Balance</h4>
 <p><span class="math display">\[
 \begin{eqnarray}
-\tag{6}
+\tag{8}
 P_{ij} \Pi_i &amp;=&amp; P_{ji}\Pi_j \\
-g(x&#39;\mid x) \frac{\Pi (x&#39;)}{\Pi (x)}\Pi (x) &amp;=&amp; g(x\mid
-x&#39;) \Pi(x&#39;) \\
+g(x&#39;\mid x) \frac{\Pi (x&#39;)}{\Pi (x)}\Pi (x) &amp;=&amp; g(x\mid x&#39;) \Pi(x&#39;) \\
 g(x&#39;\mid x) \Pi(x) &amp;=&amp; g(x\mid x&#39;) \Pi(x&#39;)
 \end{eqnarray}
 \]</span></p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

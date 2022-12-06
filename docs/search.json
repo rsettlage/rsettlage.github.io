@@ -19,7 +19,7 @@
       ],
       "date": "`r Sys.Date()`",
       "contents": "\nI am just a stub for now. I may make this it’s own collection of walk\nthroughs or it may just be a series of reviews. Not sure,\npreferences?\nCurrent books within reach of my nightstand:\n+ Hobbs and Hooten - Bayesian Models: A Statistical Primer for\nEcologists\n+ Gelman - Baysian Data Analysis\n+ Goodfellow - Deep Learning\n+ Chollet - Deep Learning with Python\n+ Raschka - Python Machine Learning\n+ Lanz - Machine Learning with R\n+ Auffarth - Machine Learning for Time-Series with Python\n\n\n\n",
-      "last_modified": "2022-07-03T10:04:17-04:00"
+      "last_modified": "2022-07-21T22:00:31-04:00"
     },
     {
       "path": "deeplearning.html",
@@ -33,15 +33,15 @@
       ],
       "date": "`r Sys.Date()`",
       "contents": "\nI like computer simulations. That is like dumb science though. What\nif the computer could actually make decisions. Woah. Perhaps that is a\nlittle too Terminator for where we are at currently, but, how far away\nis that? Probably not terribly far off. As with the MCMC collection, I\nam going to start at the start of my understanding and see where I get.\nI particularly like the adversarial networks and reinforcement learning\nso will likely spend more time on those.\n\n\n\n",
-      "last_modified": "2022-06-20T09:14:33-04:00"
+      "last_modified": "2022-11-11T09:28:07-05:00"
     },
     {
       "path": "index.html",
       "title": "Robert E. Settlage",
       "description": "Welcome!!  WIP, for sure, have requests? Submit as an issue ...\n",
       "author": [],
-      "contents": "\nMe\nWhile I am a leader in many aspects, I am also a chemist,\nstatistician, and compute junkie all rolled up into one. I am the\nbioinformatician doing the COVID surveillance sequencing analysis for\nSW-VA. I am the NVidia Deep Learning Institute Ambassador to Virginia\nTech. I love data, bigger is better. Something big enough to challenge\nthe available compute. I love automation. Do it the first time, it is\nresearch, do it a second time, it is productionizing (bug fixing ;) ), a\nthird time is now monotonous and should be automated.\nThis site is dedicated to my data science geek. I am writing this for\nme, but hope you will get something from them. What am I hoping to get\nfrom this is both clarity as I write and explain for me and a record of\nmy journey. I may also include some of my automation projects. What do I\nmean by automation, here is a snapshot of my GitHub personal view. Note\nthat most of the commits are coming from automated usage stat collection\non a set of HPC clusters every 10 min, 365.\nTODO\nadd GitHub calendar probably following some permutation of this: “https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl”\nand this “https://github.com/lepture/github-cards” or this “https://ghchart.rshah.org”\n\n\n\n",
-      "last_modified": "2022-07-21T21:55:08-04:00"
+      "contents": "\nMe\nI am a chemist, statistician, and compute junkie all rolled up into one. I am the bioinformatician doing the COVID surveillance sequencing analysis for SW-VA. I am the NVidia Deep Learning Institute Ambassador to Virginia Tech. I love data, bigger is better. Something big enough to challenge the available compute.\nI love automation. Do it the first time, it is research, do it a second time, it is productionizing (bug fixing ;) ), a third time is now monotonous and should be automated. What do I mean by automation, as an example, I have scripts to collect usage stats on a set of HPC clusters every 10 min, 365. These aren’t just for fun, they collect and display cluster status for informing where to submit jobs based on queue congestion.\nI also love AI/ML/DL. To me, teaching the computer to learn from data in a semi automated fashion is the ultimate end goal. This site is a record of my data science and [AMD]L journey. I hope to touch on everything from clustering and classification to productionizing and MLOps.\nFinally, I a big fan of MCMC methods and will try to create concise summaries of popular algorithms along with some examples of thier use.\nTODO\nadd GitHub calendar\nprobably following some permutation of this: “https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl” and this\n“https://github.com/lepture/github-cards” or this\n“https://ghchart.rshah.org”\n\n\n\n",
+      "last_modified": "2022-12-05T19:23:54-05:00"
     },
     {
       "path": "mcmc.html",
@@ -54,7 +54,7 @@
         }
       ],
       "contents": "\nComputer simulations have always been my thing. I love Chao Theory,\nFractals, and the like from a computer simulation perspective. I could\ncode some sort of random walk up and just visualize it’s progression ad\nnaseum. This collection is specific to my learning about and exploring\nMonte Carlo methods.\nThe two topics in Monte Carlo methods I like most are Hidden Markov\nmodels and time series methods. I hope to touch on both as this\ncollection matures.\n\n\n\n",
-      "last_modified": "2022-07-16T09:02:45-04:00"
+      "last_modified": "2022-11-13T21:37:31-05:00"
     },
     {
       "path": "publications.html",
