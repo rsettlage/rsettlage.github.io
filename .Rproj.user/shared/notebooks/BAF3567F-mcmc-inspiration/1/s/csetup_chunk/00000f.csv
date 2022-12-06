@@ -1,8 +1,0 @@
-"0","knitr::opts_chunk$set(echo = FALSE)"
-"0","library(knitr)"
-"0","library(kableExtra)"
-"0","library(ggpubr)"
-"2","Loading required package: ggplot2
-"
-"0","library(ggplot2)"
-"0","library(ggExtra)"

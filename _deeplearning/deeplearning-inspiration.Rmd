@@ -266,8 +266,50 @@ fig2.savefig("fig2.png", dpi=300)
 
 ## Example 2: binary classification
 
-This starts the same way: get some data.  Let's simulate it again, in a future post, we will go through a more expansive and real dataset.  For now, let's imagine a scenario where we are interested in responder/non-responder vs drug dose.  We will imagine that at some dose level, people transition between responder/non-responder with some high probability.
+This starts the same way: get some data.  I was thinking I would produce a simulated dataset, but instead decided to use my new favorite example dataset: the Palmer Penguins.  This is an actual dataset consisting of multiple observations of penguin physical attributes including bill length/depth, flipper length, weight, sex and location measurements.  To keep things simple here, let's imagine we are wanting to come up with a model for predicting sex from bill, flipper and weight measurements.  Further, due to species and location differences, let's limit the dataset to the Gentoo species.  This gives about 124 measurements.
 
+```{r python_setup}
+
+library(reticulate)
+conda_list()
+use_condaenv("r-reticulate")
+
+```
+
+
+```{python}
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from palmerpenguins import load_penguins
+
+penguins = load_penguins()
+g = sns.lmplot(x="flipper_length_mm",
+               y="body_mass_g",
+               hue="species",
+               height=7,
+               data=penguins,
+               palette=['#FF8C00','#159090','#A034F0'])
+g.set_xlabels('Flipper Length')
+g.set_ylabels('Body Mass')
+plot.show()
+
+
+df = sns.load_dataset('diamonds')
+df.head()
+
+(df
+  .filter(['carat', 'color'])
+  .query('color in ["E", "G"]')
+  .groupby(['color'])
+  .agg(['mean'])
+  .sort_values(by=('carat', 'mean'), ascending=False)
+  )
+
+```
+
+
+Ideally, we would also talk about multiclass and multilayer perceptrons, but this post is long enough and I will move both of those to another post.  For here, multiclass perceptrons could be thought of similar to binary classification with the exception that the output will be a probability of each class with a softmax performed to call the decision as the class given the maximum probability.  Multilayer perceptrons are, imo, essentially model blending.  Effectively a "hidden" layer is added to the perceptron structure that allows for intermediate and unobserved states, these states are then combined and produce the final output.  Again, we will talk through this in more detail in a future post.
 ### Multiclass perceptrons
 
 ### Multilayer Perceptrons

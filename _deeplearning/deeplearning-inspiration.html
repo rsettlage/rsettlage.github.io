@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["deeplearning-inspiration_files/anchor-4.2.2/anchor.min.js","deeplearning-inspiration_files/bowser-1.9.3/bowser.min.js","deeplearning-inspiration_files/distill-2.2.21/template.v2.js","deeplearning-inspiration_files/figure-html5/plot_accept_reject-1.png","deeplearning-inspiration_files/figure-html5/plot_accept_reject-2.png","deeplearning-inspiration_files/figure-html5/plot_accept_reject-3.png","deeplearning-inspiration_files/figure-html5/plot_posterior-1.png","deeplearning-inspiration_files/figure-html5/plot_posterior-2.png","deeplearning-inspiration_files/figure-html5/plot_priors-1.png","deeplearning-inspiration_files/header-attrs-2.12/header-attrs.js","deeplearning-inspiration_files/jquery-3.6.0/jquery-3.6.0.js","deeplearning-inspiration_files/jquery-3.6.0/jquery-3.6.0.min.js","deeplearning-inspiration_files/jquery-3.6.0/jquery-3.6.0.min.map","deeplearning-inspiration_files/kePrint-0.0.1/kePrint.js","deeplearning-inspiration_files/lightable-0.0.1/lightable.css","deeplearning-inspiration_files/popper-2.6.0/popper.min.js","deeplearning-inspiration_files/tippy-6.2.7/tippy-bundle.umd.min.js","deeplearning-inspiration_files/tippy-6.2.7/tippy-light-border.css","deeplearning-inspiration_files/tippy-6.2.7/tippy.css","deeplearning-inspiration_files/tippy-6.2.7/tippy.umd.min.js","deeplearning-inspiration_files/webcomponents-2.0.0/webcomponents.js","images/perceptron.drawio.png","images/perceptron2.drawio.png"]}
+  {"type":"character","attributes":{},"value":["deeplearning-inspiration_files/anchor-4.2.2/anchor.min.js","deeplearning-inspiration_files/bowser-1.9.3/bowser.min.js","deeplearning-inspiration_files/distill-2.2.21/template.v2.js","deeplearning-inspiration_files/figure-html5/plot_accept_reject-1.png","deeplearning-inspiration_files/figure-html5/plot_accept_reject-2.png","deeplearning-inspiration_files/figure-html5/plot_accept_reject-3.png","deeplearning-inspiration_files/figure-html5/plot_posterior-1.png","deeplearning-inspiration_files/figure-html5/plot_posterior-2.png","deeplearning-inspiration_files/figure-html5/plot_priors-1.png","deeplearning-inspiration_files/figure-html5/unnamed-chunk-4-1.png","deeplearning-inspiration_files/figure-html5/unnamed-chunk-5-1.png","deeplearning-inspiration_files/header-attrs-2.12/header-attrs.js","deeplearning-inspiration_files/jquery-3.6.0/jquery-3.6.0.js","deeplearning-inspiration_files/jquery-3.6.0/jquery-3.6.0.min.js","deeplearning-inspiration_files/jquery-3.6.0/jquery-3.6.0.min.map","deeplearning-inspiration_files/kePrint-0.0.1/kePrint.js","deeplearning-inspiration_files/lightable-0.0.1/lightable.css","deeplearning-inspiration_files/popper-2.6.0/popper.min.js","deeplearning-inspiration_files/tippy-6.2.7/tippy-bundle.umd.min.js","deeplearning-inspiration_files/tippy-6.2.7/tippy-light-border.css","deeplearning-inspiration_files/tippy-6.2.7/tippy.css","deeplearning-inspiration_files/tippy-6.2.7/tippy.umd.min.js","deeplearning-inspiration_files/webcomponents-2.0.0/webcomponents.js","fig1.png","fig2.png","images/perceptron.drawio.png","images/perceptron2.drawio.png"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1501,8 +1501,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#learning">Learning</a>
 <ul>
 <li><a href="#loss-function">Loss function</a></li>
+<li><a href="#gradient-descent">Gradient descent</a></li>
 </ul></li>
-<li><a href="#example-1-linear-model">Example 1: linear model</a>
+<li><a href="#example-1-linear-model">Example 1: linear model</a></li>
+<li><a href="#example-2-binary-classification">Example 2: binary
+classification</a>
 <ul>
 <li><a href="#multiclass-perceptrons">Multiclass perceptrons</a></li>
 <li><a href="#multilayer-perceptrons">Multilayer Perceptrons</a></li>
@@ -1556,9 +1559,8 @@ vector.</p>
 </blockquote>
 <p>So, the perceptron is essentially an over simplified model of our
 understanding of neurons. The perceptron is an algorithm that can be
-tuned to perform binary classification tasks. Since we are simplifying,
-let’s draw the neuron using input/output labels as our new
-perceptron.</p>
+tuned to perform classification tasks. Since we are simplifying, let’s
+draw the neuron using input/output labels as our new perceptron.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
 <img src="images/perceptron.drawio.png" alt="Simple perceptron." width="164" />
@@ -1602,12 +1604,14 @@ gradient descent. As mentioned above, we are adding a bias to the
 algorithm. This is functionally equivalent to an intercept in a linear
 model. I have labeled it as “b” and given it a weight, <span
 class="math inline">\(w_0\)</span>, it is convenient to assume b=1 and
-add this as a dimension to our data.</p>
+add this as a dimension to our data as <span
+class="math inline">\(x_0\)</span>.</p>
 <h3 id="z">Z</h3>
 <p>We need a function to combine the data with the appropriate weights.
 This is generally given the sybmol “z” or in some figures the symbol for
-sum: <span class="math inline">\(\sum\)</span>. Setting the bias to 1
-and learning the associate weight leaves us with:</p>
+sum: <span class="math inline">\(\sum\)</span>. Setting the bias <span
+class="math inline">\(x_0 = 1\)</span> and learning the associate weight
+(<span class="math inline">\(w_0\)</span>) leaves us with:</p>
 <p><span class="math display">\[
 \begin{equation}
 \tag{1}
@@ -1633,7 +1637,7 @@ f(z) =
 \end{equation}
 \]</span></p>
 <p>Activation functions are a varied and active area of research. Common
-activations functions in neural networks include ReLU, sigmoid, and tanh
+activation functions in neural networks include ReLU, sigmoid, and tanh
 among others. Choice of activation function depends highly on the goals
 of the algorithm and will be discussed in its own future post. Here I
 will simply give the sigmoid activation function and state that it is
@@ -1643,12 +1647,15 @@ desired. The sigmoid function looks like:</p>
 \begin{equation}
 \tag{3}
 f(z) = \frac{1}{1+e^{-z}} = \frac{1}{1+e^{-\textbf{w}\cdot\textbf{x}}}
+\equiv \sigma(z)
 \end{equation}
 \]</span> It is useful to note that <span
 class="math inline">\(\textbf{w}\cdot\textbf{x} \in
 [-\infty,\infty]\)</span> such that <span class="math inline">\(f(z) \in
 [0,1]\)</span>. For those of you that have studied logistic regression,
-this should look familiar.</p>
+this should look familiar. In neural network diagrams, you will often
+see the sigmoid activation as <span
+class="math inline">\(\sigma(z)\)</span>.</p>
 <h3 id="outputs">Outputs</h3>
 <p>The output of the perceptron is our decision. If using the step
 function given in (2), the decision may be something as simple as is the
@@ -1665,7 +1672,7 @@ class="math inline">\(y\)</span>. This output can be a binary (0,1),
 categorical discrete (0,1,2,…), or a continuous value on some range
 [0,1]. We often (always?) are fitting some known data. Using the known
 data, we can score how well the current settings on weight fit the data.
-We do this via a score function often called a loss function in
+We do this via a score function often called a cost or loss function in
 AI/machine learning speak. If we can score our result, we should be able
 to improve our score. We do this through iterative updates, often using
 a variant of gradient descent and back propagation.</p>
@@ -1696,10 +1703,10 @@ inclusion of the bias as an x and perhaps multiple dimensions to the
 data. Note that MSE is always positive and gets smaller as the
 prediction and true values converge.</p>
 <h4 id="binary-cross-entropy">Binary Cross Entropy</h4>
-<p>Often we are looking discriminate between categories, cat vs dog,
+<p>Often we are looking to discriminate between categories, cat vs dog,
 high vs medium vs low, safe vs risky, etc. In the general case, there
 can be many categories. The loss function is effectively a probability
-distance.</p>
+distance. In the case of a binary choice:</p>
 <p><span class="math display">\[
 \begin{equation}
 \tag{5}
@@ -1716,19 +1723,153 @@ that the log will always be negative because <span
 class="math inline">\(0 \le \hat{y}_i \le 1\)</span>, hence the “-” out
 front to ensure we have a positive value. Our goal is to minimize the
 loss.</p>
-<h4 id="gradient-descent">Gradient descent</h4>
-<p>So, we can calculate an error or loss, how do we do better? We could
+<h3 id="gradient-descent">Gradient descent</h3>
+<p>OK, we can calculate an error or loss, how do we do better? We could
 take random steps and start to get an idea of what the loss surface
 looks like, but that seems like a good way to compute for ever (not a
 bad thing if I am making pretty pictures along the way ;) ). Instead, we
 will use a little calculus to figure out in which direction we should
 step. Remembering from calculus, if we compute the gradient, we will
-have an indication of slope.</p>
+have an indication of slope at the point evaluated.</p>
+<p><span class="math display">\[
+\begin{equation}
+\tag{6}
+w_j^{(t)} = w_j^{(t-1)} - \lambda \ast \nabla_{w_j} Loss(w_j)
+\end{equation}
+\]</span></p>
+<p>Thinking of this in terms of a linear model, our cost function is
+often MSE given above in (4), we need to compute the gradient:</p>
+<p><span class="math display">\[
+\begin{equation}
+\tag{7}
+\nabla_{w_j} Loss(w_j) = \nabla_{w_j} \left[\frac{1}{n} \sum_{i=1}^n
+(y_i - \hat{\textbf{w}}\cdot\textbf{x}_i)^2\right]
+\end{equation}
+\]</span></p>
+<p>For a simple linear model, we can simplify our thoughts a little and
+think of <span class="math inline">\(\textbf{w}\cdot\textbf{x}\)</span>
+as being <span class="math inline">\(mx + b\)</span>.</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+\tag{8}
+\nabla_{w_{[b,m]}}Loss(w_{[b,m]}) &amp;=&amp; \nabla_{w_{[b,m]}}
+\left[\frac{1}{n} \sum_{i=1}^n (y_i - (mx_i+b))^2\right] \\
+\tag{9}
+\nabla_{w_{b}}Loss(w_b) &amp;=&amp; \frac{-2}{n} \sum_{i=1}^n (y_i -
+(mx_i+b)) \\
+\tag{10}
+\nabla_{w_{m}}Loss(w_m) &amp;=&amp; \frac{-2}{n} \sum_{i=1}^n x_i(y_i -
+(mx_i+b))
+\end{eqnarray}
+\]</span> For binary cross entropy:</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+\tag{11}
+\nabla_{w_{j}}Loss(w_j) &amp;=&amp; \nabla_{w_{j}}
+\left[-\frac{1}{n}\sum_{i}^n y_i log(\hat{y}_i) +
+(1-y_i)log(1-\hat{y}_i)\right] \\
+  &amp;&amp; \text{subsituting in (3)} \\
+  &amp;=&amp; \frac{2}{n} \sum_{i=1}^n x_i(y_i - \sigma(z)) \\
+\end{eqnarray}
+\]</span></p>
 <h2 id="example-1-linear-model">Example 1: linear model</h2>
-<p>We have gone way to long without data. :)</p>
+<p>We have gone way too long without data. :)</p>
+<p>First, let’s get some data:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">## create X</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>observations <span class="op">=</span> <span class="dv">50</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.matrix(<span class="bu">range</span>(observations))<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.matrix(np.ones(observations))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.hstack([np.matrix(ones).T, x.T])</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># create Y</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>true_weights <span class="op">=</span> np.matrix([[<span class="dv">10</span>],[<span class="dv">3</span>]])</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.matrix(np.random.uniform(<span class="op">-</span><span class="dv">10</span>,<span class="dv">10</span>, size<span class="op">=</span>(observations,))).T</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.matmul(X,true_weights) <span class="op">+</span> noise</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># take a peak at our data</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>fig1, ax1 <span class="op">=</span> plt.subplots()</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>ax1.plot(X[:,<span class="dv">1</span>], Y, <span class="st">&quot;x&quot;</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">&#39;seaborn-notebook&#39;</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>ax1.grid()</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>fig1.savefig(<span class="st">&quot;fig1.png&quot;</span>, dpi<span class="op">=</span><span class="dv">300</span>)</span></code></pre></div>
+</div>
+<figure>
+<img src="fig1.png"
+alt="Figure 1: Scatterplot of data drawn using unif(-10,10) as noise." />
+<figcaption aria-hidden="true">Figure 1: Scatterplot of data drawn using
+unif(-10,10) as noise.</figcaption>
+</figure>
+<p>Now we need to implement the perceptron. Given a loss function, it
+goes as follows:</p>
+<ol type="1">
+<li>init <span class="math inline">\(\textbf{w}\sim
+runif(0,1)\)</span><br />
+</li>
+<li>calculate cost (MSE)<br />
+</li>
+<li>update weights according to gradient<br />
+</li>
+<li>repeat 2-3 until some stopping rule (could be number of iterations,
+could be stability of weights, up to us).</li>
+</ol>
+<p>There are some other things that we should talk about,
+train/validate/test sets, etc, but we will skip for this post. For now,
+let’s just do it:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">## ok, do gradient descent</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradient_descent(x, y, w_init, learning_rate):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> x.shape[<span class="dv">0</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    w_grad <span class="op">=</span> w_init</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">## need a stopping rule, could just be iterations, could also be a min move</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">## using matrix algebra to simplify this a bit</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    maxIteration <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(maxIteration):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> y <span class="op">-</span> x <span class="op">*</span> w_grad <span class="co">#observed - predicted</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>N <span class="op">*</span> (x.T <span class="op">*</span> error)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        w_grad <span class="op">=</span> w_grad <span class="op">-</span> learning_rate <span class="op">*</span> gradient</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w_grad</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>w_start <span class="op">=</span> np.matrix([[<span class="dv">0</span>],[<span class="dv">0</span>]])</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>learning_rate <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> gradient_descent(X,Y,w_start,learning_rate)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># exact solution using slr inv(x&#39;x)*x&#39;y</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>w_exact <span class="op">=</span> np.linalg.inv(X.T<span class="op">*</span>X)<span class="op">*</span>X.T<span class="op">*</span>Y</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># take a peak at our how we did</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>fig2, ax2 <span class="op">=</span> plt.subplots()</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">&#39;seaborn-notebook&#39;</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>ax2.plot(X[:,<span class="dv">1</span>], X <span class="op">*</span> w, color<span class="op">=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>ax2.scatter(np.ravel(X[:,<span class="dv">1</span>]),np.ravel(Y), marker<span class="op">=</span><span class="st">&quot;2&quot;</span>, color<span class="op">=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>ax2.text(<span class="dv">25</span>,<span class="dv">50</span>,(<span class="st">&quot;b = &quot;</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(w[<span class="dv">0</span>,<span class="dv">0</span>],<span class="dv">2</span>)) <span class="op">+</span> <span class="st">&quot;; m = &quot;</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(w[<span class="dv">1</span>,<span class="dv">0</span>],<span class="dv">2</span>))))</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>ax2.text(<span class="dv">25</span>,<span class="dv">40</span>,(<span class="st">&quot;b.exact = &quot;</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(w_exact[<span class="dv">0</span>,<span class="dv">0</span>],<span class="dv">2</span>)) <span class="op">+</span> <span class="st">&quot;; m.exact = &quot;</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(w_exact[<span class="dv">1</span>,<span class="dv">0</span>],<span class="dv">2</span>))))</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>ax2.grid()</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>fig2.savefig(<span class="st">&quot;fig2.png&quot;</span>, dpi<span class="op">=</span><span class="dv">300</span>)</span></code></pre></div>
+</div>
+<figure>
+<img src="fig2.png"
+alt="Figure 2: perceptron learning of weights (1,3) after 10k iterations." />
+<figcaption aria-hidden="true">Figure 2: perceptron learning of weights
+(1,3) after 10k iterations.</figcaption>
+</figure>
+<h2 id="example-2-binary-classification">Example 2: binary
+classification</h2>
+<p>This starts the same way: get some data. Let’s simulate it again, in
+a future post, we will go through a more expansive and real dataset. For
+now, let’s imagine a scenario where we are insterested in</p>
 <h3 id="multiclass-perceptrons">Multiclass perceptrons</h3>
 <h3 id="multilayer-perceptrons">Multilayer Perceptrons</h3>
-<div class="sourceCode" id="cb2"><pre
+<div class="sourceCode" id="cb4"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
