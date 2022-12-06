@@ -41,7 +41,7 @@
       "description": "Welcome!!  WIP, for sure, have requests? Submit as an issue ...\n",
       "author": [],
       "contents": "\nMe\nI am a chemist, statistician, and compute junkie all rolled up into one. I am the bioinformatician doing the COVID surveillance sequencing analysis for SW-VA. I am the NVidia Deep Learning Institute Ambassador to Virginia Tech. I love data, bigger is better. Something big enough to challenge the available compute.\nI love automation. Do it the first time, it is research, do it a second time, it is productionizing (bug fixing ;) ), a third time is now monotonous and should be automated. What do I mean by automation, as an example, I have scripts to collect usage stats on a set of HPC clusters every 10 min, 365. These aren’t just for fun, they collect and display cluster status for informing where to submit jobs based on queue congestion.\nI also love AI/ML/DL. To me, teaching the computer to learn from data in a semi automated fashion is the ultimate end goal. This site is a record of my data science and [AMD]L journey. I hope to touch on everything from clustering and classification to productionizing and MLOps.\nFinally, I a big fan of MCMC methods and will try to create concise summaries of popular algorithms along with some examples of thier use.\nTODO\nadd GitHub calendar\nprobably following some permutation of this: “https://dev.to/natterstefan/how-to-add-your-github-activities-to-your-github-profile-5fnl” and this\n“https://github.com/lepture/github-cards” or this\n“https://ghchart.rshah.org”\n\n\n\n",
-      "last_modified": "2022-12-05T19:23:54-05:00"
+      "last_modified": "2022-12-05T19:35:24-05:00"
     },
     {
       "path": "mcmc.html",
