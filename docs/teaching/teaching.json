@@ -23,8 +23,8 @@
     ],
     "contents": "\nIntroduction to Statistical Computing\nAug 2022 – Dec 2022\nThis is TBD. Going to add quite a bit more automation this semester\nfor some fun.\nTopics include:\nR and scripting Markdown and Latex\nbash use\nGit\nVery basic introduction to Monte Carlo\nIntroduction to neural networks and Keras\nAutomation through GitHub actions\n\n\n\n",
     "preview": {},
-    "last_modified": "2022-06-13T22:00:01-04:00",
-    "input_file": "stat5014f2022.knit.md"
+    "last_modified": "2022-06-13T22:00:02-04:00",
+    "input_file": {}
   },
   {
     "path": "teaching/NA-stat5014f2021/",

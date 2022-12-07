@@ -1,0 +1,463 @@
+---
+title: "Fun with H2O and LIME"
+description: |
+  Quick posting showing use of H2O.
+draft: false
+categories: [DeepLearning, H2O, LIME]
+author:
+  - name: Robert Settlage
+    orcid: 0000-0002-1354-7609
+date: 2022-11-04
+output:
+  distill::distill_article:
+    self_contained: false
+    highlight: default
+    toc: true
+    float: true
+includes:
+  \usepackage{amsmath}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, 
+                      include=TRUE, message=FALSE,
+                      label.prefix=c(table = ''))
+library(knitr)
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(forcats)
+library(ggplot2)
+library(lime)
+library(h2o)
+library(skimr)
+library(rsample)
+library(recipes)
+library(tibble)
+library(yardstick)
+
+# have to do the init outside of compute code chunk b/c I want to cache
+h2o.init()
+h2o.no_progress()
+```
+
+This is a quick post to show use of H2O as an automl tool.  As stated in the docs (<https://docs.h2o.ai/h2o/latest-stable/h2o-docs/welcome.html>), H2O is an open source, distributed, fast and scalable machine learning platform written in Java. It supports many different supervised and unsupervised algorithms.  I am interested in how optimum the generated models are.  Here I will just demonstrate the use of the platform, compare to a quick GLM, and will end by showing LIME for explanation of model outcomes.
+
+For the demo dataset, I am using the Palmer Penguins dataset.  This dataset has 344 measurements of penguin physical characteristics along with labels for sex, species, location and year of the measurement.  For this demonstration, I will see what H2O can accomplish in predicting sex from the other attributes.  First, some EDA just to get a sense of what the dataset looks like:
+
+## EDA
+
+```{r eda-stage, layout="l-body-outset"}
+
+# love the skimr package, quick look shows some missing values and distributions
+skim(palmerpenguins::penguins)
+
+# get dataset reformatted and filtered, dont want to deal with missing data
+penguins_new <- palmerpenguins::penguins %>% 
+  select(-year) %>%
+  filter(complete.cases(.)) %>%
+  mutate_if(is.factor, as_factor)
+
+
+penguins_new %>%
+  ggplot(aes(x=species, y=(bill_length_mm))) +
+  geom_violin() +
+  geom_jitter(aes(color=sex), alpha=0.4, width = 0.1) + 
+  facet_grid(~island) +
+  labs(title="bill length by species, island, sex")
+
+penguins_new %>%
+  ggplot(aes(x=species, y=(bill_depth_mm))) +
+  geom_violin() +
+  geom_jitter(aes(color=sex), alpha=0.4, width = 0.1) + 
+  facet_grid(~island) +
+  labs(title="bill depth by species, island, sex")
+
+penguins_new %>%
+  ggplot(aes(x=species, y=(flipper_length_mm))) +
+  geom_violin() +
+  geom_jitter(aes(color=sex), alpha=0.4, width = 0.1) + 
+  facet_grid(~island) +
+  labs(title="flipper length by species, island, sex")
+
+penguins_new %>%
+  ggplot(aes(x=species, y=(body_mass_g))) +
+  geom_violin() +
+  geom_jitter(aes(color=sex), alpha=0.4, width = 0.1) + 
+  facet_grid(~island) +
+  labs(title="body by species, island, sex")
+
+pairs(x=penguins_new %>% select_if(is.numeric), 
+      pch=20)
+
+```
+
+## Feature Engineering
+
+This is where an SME would add the secret sauce.  I am definitely NOT a penguin biologist, but I am going to pretend I know bill volume is important and can be computed by assuming the bill is a pyramid with volume calculated as $$volume = \frac{1}{3} \ast length \ast depth^2$$  I am also going to center and scale the numeric predictors.  Bill_volume might actually do some good in separating sexes, so let's keep it.  This will make it's way into the recipe in the next section.
+
+
+```{r feature-engineering}
+
+penguins_new <- penguins_new %>%
+  mutate(bill_volume = 1/3 * bill_length_mm * bill_depth_mm^2)
+
+penguins_new %>%
+  ggplot(aes(x=species, y=(bill_volume))) +
+  geom_violin() +
+  geom_jitter(aes(color=sex), alpha=0.4, width = 0.1) + 
+  facet_grid(~island) +
+  labs(title="bill volume by species, island, sex")
+
+
+```
+
+## Modeling with H2O
+
+Here we will do the normal 10-fold cross validation and have our holdout set for publication metrics.  To get this, we will use `rsample::initial_split` to create the holdout set of 10% of the data.  Additionally, I am creating a recipe for the data processing to assist in later predictions using new data.
+
+```{r prep_data}
+
+# Put most of the data into the training set, want the other set more like a true
+# test set as H2O is doing cross validation so the validation data set is pulled 
+# from the training dataset
+
+set.seed(34547)
+penguins_split <- initial_split(
+  palmerpenguins::penguins %>% filter(complete.cases(.)), 
+  prop = 0.90)
+# now do the split
+train_data <- training(penguins_split)
+test_data  <- testing(penguins_split)
+
+# just want to center and scale, leave factors to h2o.
+# feature engineering step should be in recipe so that new data is captured
+# so adding the bill_volume calc here
+pengiun_recipe <- recipe(sex~., data=train_data) %>%
+  step_select(-year) %>%
+  step_factor2string() %>%
+  step_string2factor() %>%
+  step_mutate(bill_volume = 1/3 * bill_length_mm * bill_depth_mm^2) %>%
+  step_center(all_numeric_predictors()) %>%
+  step_scale(all_numeric_predictors())
+
+# printing the recipe gives a nice summary 
+pengiun_recipe
+  
+
+# don't forget to bake the data
+
+train_data_baked <- pengiun_recipe %>% 
+    prep() %>% 
+    bake(train_data) 
+
+test_data_baked <- pengiun_recipe %>% 
+    prep() %>% 
+    bake(test_data) 
+
+```
+
+With our data prepped, we are now ready to proceed to the modeling stage.  In this case, we are creating a model to predict sex and have a labeled dataset for training.  In machine learning speak, this is a supervised learning classification problem.  H2O supports many different algorithms for performing this task.  We are going to run H2O's AutoML to get an idea of how it does in an automated algorithm search and follow that up by running the `h2o.glm` method to see what we can do manually.
+
+### Automl
+
+H2O's automl method is an attempt at a completely hands off machine learning excersize.  H2O will create models using tree based, deep learning and regression methods.  It will run until a user specified time limit or the number of models built reaches the user specified limit.  By default, it will use 5-fold cross-validation.   I am going to specify a 20 min time limit, change the cross-validation strategy to 10-fold, and set the seed for reproducibility.
+
+
+```{r automl, cache=TRUE}
+
+train_h2o <- as.h2o(train_data_baked)
+test_h2o  <- as.h2o(test_data_baked)
+
+y <- "sex"
+x <- setdiff(names(train_h2o), y)
+
+automl_models_h2o <- h2o.automl(
+    x = x,
+    y = y,
+    training_frame   = train_h2o,
+    max_runtime_secs = 1200, 
+    nfolds           = 10,
+    seed = 38981
+)
+
+```
+
+From the automl training, we can look at the leaderboard and get a quick sense of how it did by looking at the confusion matrix for our holdout set.  In the below, we see the StackedEnsemble and DeepLearning methods performed best using AUC as the metric.  I want to focus on the DeepLearning model so will extract the top DeepLearning model.
+
+```{r automl-topmodel}
+
+automl_models_h2o@leaderboard
+
+# grab first model hash
+best_model <- automl_models_h2o@leaderboard %>% 
+  as_tibble() %>%
+  filter(str_detect(model_id,"DeepLearning")) %>%
+  slice(1)
+best_model
+
+# save the results in its own object
+best_model_results <- h2o.getModel(paste0(best_model[1]))
+
+```
+
+### Manually specifying a model method
+
+Suppose, we are interested specifically in a GLM, H2O allows one to create only the GLM models using the glm method.  This allows us to fine tune the model.  For instance, in the below I specify `lambda = 0` to turn off regularization and again use 10-fold cross validation.
+
+```{r glms}
+
+pengiun_glm <- h2o.glm(family = "binomial",
+                       x = x,
+                       y = y,
+                       training_frame = train_h2o,
+                       nfolds = 10,
+                       lambda = 0.0,
+                       seed = 58931)
+
+```
+
+
+## Explore results 
+
+Exploring H2O model results is facilitated through a bunch of helper functions.  Here I will show functions for looking at performance, prediction and explainability.
+
+### Model performance
+
+Model performance is a highly technical discussion I am avoiding here.  What I instead want to highlight is how to get to the performance metrics H2O gives access to.  First, for classification problems like our example, the confusion matrix is a good first indicator of performance.
+
+AutoML best model:
+
+```{r confusions-automl, layout="l-body-outset"}
+
+h2o.confusionMatrix(best_model_results)
+
+```
+
+GLM model:
+
+```{r confusions-glm, layout="l-body-outset"}
+
+h2o.confusionMatrix(pengiun_glm)
+
+```
+
+
+Additionally, given a trained model object, depending on the metric desired, one would use the metric method or retrieve the value from a derived performance object.  For classification, generally you would operate on the performance object.  In this example, incorrect predictions in either direction are equally undesirable such that the metrics we may be concerned with are F1, accuracy or AUC.
+
+```{r model-performance}
+
+# make performance objects
+best_model_performance <- h2o.performance(best_model_results)
+glm_performance <- h2o.performance(pengiun_glm)
+
+# F1, just retrieving max irrespective of threshold
+best_model_F1 <- max(h2o.F1(best_model_performance)$f1)
+glm_F1 <- max(h2o.F1(glm_performance)$f1)
+
+# accuracy, just retrieving max irrespective of threshold
+best_model_accuracy <- max(h2o.accuracy(best_model_performance)$accuracy)
+glm_accuracy <- max(h2o.accuracy(glm_performance)$accuracy)
+
+# AUC
+best_model_auc <- h2o.auc(best_model_performance)
+glm_auc <- h2o.auc(glm_performance)
+
+results <- as.data.frame(cbind(F1 = c(best_model_F1, glm_F1), 
+                               Accuracy = c(best_model_accuracy, glm_accuracy), 
+                               AUC = c(best_model_auc, glm_auc)))
+rownames(results) <- c("autoML", "GLM")
+knitr::kable(round(results, 3), caption = "Classification metrics")
+
+```
+
+### Model prediction
+
+The goal of modeling is to create a model that can predict on new data.  H2O offers a method to give predictions on new data.  Let's make the predictions and plot the confusion matrix on this.  Could have done it using H2O's `confusionMatrix` function, but in preperation for LIME, let's grab the predictions first for autoML and then the GLM:.
+
+```{r predictions}
+
+# make some quick predictions to see how we did
+automl_best_model_predictions <- 
+  h2o.predict(best_model_results, newdata = test_h2o) %>% 
+  as_tibble() %>% 
+  bind_cols(
+    test_data_baked %>% select(sex)
+    ) 
+
+glm_predictions <- 
+  h2o.predict(pengiun_glm, newdata = test_h2o) %>% 
+  as_tibble() %>% 
+  bind_cols(
+    test_data_baked %>% select(sex)
+    ) 
+
+both_predictions <-
+  bind_cols(automl_best_model_predictions[,1:3],
+            glm_predictions)
+
+names(both_predictions) <- c(paste0("automl_",names(automl_best_model_predictions[,1:3])), 
+         paste0("glm_",names(glm_predictions[1:3])),"sex")
+
+both_predictions <- both_predictions %>%
+  select(sex, contains("predict"), everything())
+
+both_predictions %>% 
+  yardstick::conf_mat(sex, automl_predict) %>% 
+  autoplot(type="heatmap") + labs(title="autoML confusion")
+
+both_predictions %>% 
+  yardstick::conf_mat(sex, glm_predict) %>% 
+  autoplot(type="heatmap") + labs(title="GLM confusion")
+
+```
+
+From this, it looks like the GLM performs better on new data.  This suggests there may be some over fitting.  We can look at the learning curve for the top model.  When we do this, it does indeed appear as though the model was overfit as evident by the increasing logloss for the CV training datasets starting around epoc 1000.
+
+```{r learning-curve}
+
+h2o.learning_curve_plot(best_model_results)
+
+```
+
+#### Model explainability
+
+In many cases, explaining a model is important, for instance, in mechanistic studies or in model improvement efforts.  H2O offers a single function for a global look at model factor importance, `explain`.  Limiting to the classification example, the output includes a confusion matrix, variable importance plots and partial dependence plots as show below.  Each of these and more can be generated through individual calls.  For the autoML leader:
+
+```{r model-explains, results='markup'}
+
+h2o.explain(best_model_results, test_h2o)
+
+```
+From this, it appears species and bill length are the top variables leading to assignment of sex.  Note that `sex=male` is a positive outcome, so response is 1 in the continuous plots.   
+
+Explanations for the glm model:
+
+```{r model-explains-glm}
+
+h2o.explain(pengiun_glm, test_h2o)
+
+```
+
+The partial dependence plots for the continuous features look a lot more certain as the data approaches the extremes, ie large `bill_volume` values suggest with high probability a male penguin.
+
+#### Feature importance and LIME
+
+The interesting features are often the ones where the predictions are incorrect.  To look at feature importance on individual predictions, H2O does offer methods for tree based algorithms, but not currently on regression or deep learning models.  For this, I am turning to LIME for explanation of individual observations.  To use LIME, you first build an explainer using the model and training data, then create an explanation of the data of interest.  The explaination uses permutations of the observations variable values to get an idea of the local influence of the variables.
+
+First, let's remember what our prediction set is along with a filter for incorrect predictions.
+
+```{r prediction-data}
+
+both_predictions
+
+both_predictions %>% 
+  mutate_if(is.factor, as.character) %>%
+  filter(!(sex == automl_predict) | !(sex == glm_predict))
+
+```
+
+Now on to the autoML DeepLearning leader, let's look at data point 3 which is incorrectly predicted by both the DL and GLM models.
+
+```{r single-data-point}
+
+test_data %>% 
+  slice(3) %>% 
+  mutate(bill_volume = 1/3 * bill_length_mm * bill_depth_mm^2) %>%
+  glimpse()
+
+```
+
+Looking back at the plots, this is a smaller bird, suggesting perhaps why the algorithm would have difficulties.  
+
+```{r lime-aide-autoML}
+
+## ok, now for the fun, lets look at what the importance of each feature is
+## build the explainer
+explainer_penguins_autoML <- train_data_baked %>% 
+  select(-sex) %>% 
+  lime::lime(
+        model         = best_model_results,
+        bin_continous = TRUE,
+        n_bins        = 4,
+        quantile_bins = TRUE
+)
+#summary(explainer_penguins)
+
+# explain a data point, should look at one it failed on
+explanation_autoML <- test_data_baked %>% 
+  slice(3) %>% 
+  select(-sex) %>%
+  lime::explain(
+    explainer = explainer_penguins_autoML,
+    n_labels = 1,
+    #labels = "female",
+    n_features = 4,
+    n_permutations = 5000,
+    kernel_width = 0.75
+)
+
+# plot the importance in explaining the decision
+lime::plot_features(explanation_autoML)
+
+# can do it for many predictions
+explanations_autoML <- test_data_baked %>% slice(1:20) %>% select(-sex) %>%
+  lime::explain(
+      explainer = explainer_penguins_autoML,
+      n_labels = 1,
+      n_features = 8,
+      #n_permutations = 5000,
+      kernel_width = 0.9
+)
+lime::plot_explanations(explanations_autoML)
+
+```
+
+Looking at the variable importance plot shows bill length and body mass contributed to the assignment as female while species contradicted the assignment.  Looking at the heatmap shows body mass and species=Adelie contributed the most to assignment of sex in the first 20 test cases.
+
+On to the GLM model:
+
+```{r lime-aide-glm}
+
+## ok, now for the fun, lets look at what the importance of each feature is
+## build the explainer
+explainer_penguins_glm <- train_data_baked %>% 
+  select(-sex) %>% 
+  lime::lime(
+        model         = pengiun_glm,
+        bin_continous = TRUE,
+        n_bins        = 4,
+        quantile_bins = TRUE
+)
+#summary(explainer_penguins)
+
+# explain a data point
+explanation_glm <- test_data_baked %>% slice(3) %>% select(-sex) %>%
+  lime::explain(
+    explainer = explainer_penguins_glm,
+    n_labels = 1,
+    #labels = "female",
+    n_features = 4,
+    n_permutations = 5000,
+    kernel_width = 0.75
+)
+
+# plot the importance in explaining the decision
+lime::plot_features(explanation_glm)
+
+# can do it for many predictions
+explanations_glm <- test_data_baked %>% slice(1:20) %>% select(-sex) %>%
+  lime::explain(
+      explainer = explainer_penguins_glm,
+      n_labels = 1,
+      n_features = 8,
+      #n_permutations = 5000,
+      kernel_width = 0.9
+)
+lime::plot_explanations(explanations_glm)
+
+```
+
